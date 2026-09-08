@@ -1,3 +1,4 @@
+from boltz.model.modules.packed import packed_context
 import gc
 from typing import Any, Optional
 
@@ -399,6 +400,7 @@ class Boltz2(LightningModule):
                 x["label"] for x in self.val_group_mapper.values()
             }, msg
 
+    @packed_context
     def forward(
         self,
         feats: dict[str, Tensor],

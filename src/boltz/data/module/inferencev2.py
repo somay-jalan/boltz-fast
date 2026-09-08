@@ -1,4 +1,5 @@
 import pickle
+from functools import partial
 from pathlib import Path
 from typing import Optional
 
@@ -109,7 +110,7 @@ def load_input(
     )
 
 
-def collate(data: list[dict[str, Tensor]]) -> dict[str, Tensor]:
+def collate(data: list[dict[str, Tensor]], packed: bool = False) -> dict[str, Tensor]:
     """Collate the data.
 
     Parameters
@@ -130,6 +131,9 @@ def collate(data: list[dict[str, Tensor]]) -> dict[str, Tensor]:
     collated = {}
     for key in keys:
         values = [d[key] for d in data]
+        if packed and key in {"msa", "msa_mask", "has_deletion", "deletion_value", "msa_paired"}:
+            collated[key] = values
+            continue
 
         if key not in [
             "all_coords",
@@ -325,6 +329,7 @@ class Boltz2InferenceDataModule(pl.LightningDataModule):
         mol_dir: Path,
         num_workers: int,
         batch_size: int = 1,
+        packed: bool = False,
         constraints_dir: Optional[Path] = None,
         template_dir: Optional[Path] = None,
         extra_mols_dir: Optional[Path] = None,
@@ -362,6 +367,7 @@ class Boltz2InferenceDataModule(pl.LightningDataModule):
             raise ValueError("batch_size must be at least 1")
         self.num_workers = num_workers
         self.batch_size = batch_size
+        self.packed = packed
         self.manifest = manifest
         self.target_dir = target_dir
         self.msa_dir = msa_dir
@@ -398,7 +404,7 @@ class Boltz2InferenceDataModule(pl.LightningDataModule):
             num_workers=self.num_workers,
             pin_memory=True,
             shuffle=False,
-            collate_fn=collate,
+            collate_fn=partial(collate, packed=self.packed),
         )
 
     def transfer_batch_to_device(
@@ -435,5 +441,8 @@ class Boltz2InferenceDataModule(pl.LightningDataModule):
                 "record",
                 "affinity_mw",
             ]:
-                batch[key] = batch[key].to(device)
+                if isinstance(batch[key], list):
+                    batch[key] = [value.to(device) for value in batch[key]]
+                else:
+                    batch[key] = batch[key].to(device)
         return batch

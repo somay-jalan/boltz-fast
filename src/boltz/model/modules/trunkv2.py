@@ -593,6 +593,9 @@ class MSAModule(nn.Module):
             The output pairwise embeddings.
 
         """
+        if getattr(self, "packed_inference", False) and not self.training:
+            from boltz.model.modules.packed import msa_module
+            return msa_module(self, z, emb, feats, use_kernels)
         # Set chunk sizes
         if not self.training:
             if z.shape[1] > const.chunk_size_threshold:

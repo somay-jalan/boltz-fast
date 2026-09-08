@@ -920,6 +920,12 @@ def cli() -> None:
     default=1,
 )
 @click.option(
+    "--batch_layout",
+    type=click.Choice(["padded", "packed"]),
+    default="padded",
+    help="Boltz-2 inference layout. Packed execution avoids padding inside repeated model stacks.",
+)
+@click.option(
     "--contact_guidance/--no_contact_guidance",
     default=True,
     help=(
@@ -1094,6 +1100,7 @@ def predict(  # noqa: C901, PLR0915, PLR0912
     output_format: Literal["pdb", "mmcif"] = "mmcif",
     num_workers: int = 2,
     batch_size: int = 1,
+    batch_layout: str = "padded",
     contact_guidance: bool = True,
     full_precision: bool = False,
     override: bool = False,
@@ -1122,6 +1129,8 @@ def predict(  # noqa: C901, PLR0915, PLR0912
         msg = "Running on CPU, this will be slow. Consider using a GPU."
         click.echo(msg)
 
+    if batch_layout == "packed" and model != "boltz2":
+        raise click.UsageError("Packed inference is supported for Boltz-2 only.")
     if batch_size > 1 and model != "boltz2":
         raise click.UsageError("Batched inference is only supported for Boltz-2.")
     if batch_size > 1 and use_potentials:
@@ -1321,6 +1330,7 @@ def predict(  # noqa: C901, PLR0915, PLR0912
                 mol_dir=mol_dir,
                 num_workers=num_workers,
                 batch_size=batch_size,
+                packed=batch_layout == "packed",
                 constraints_dir=processed.constraints_dir,
                 template_dir=processed.template_dir,
                 extra_mols_dir=processed.extra_mols_dir,
@@ -1371,6 +1381,10 @@ def predict(  # noqa: C901, PLR0915, PLR0912
             steering_args=asdict(steering_args),
         )
         model_module.eval()
+        if batch_layout == "packed":
+            from boltz.model.modules.packed import enable_packed
+            enable_packed(model_module)
+            click.echo("Packed token/pair stacks, atom windows and MSA execution enabled.")
 
         # Compute structure predictions
         trainer.predict(
@@ -1410,6 +1424,7 @@ def predict(  # noqa: C901, PLR0915, PLR0912
             mol_dir=mol_dir,
             num_workers=num_workers,
             batch_size=batch_size,
+            packed=batch_layout == "packed",
             constraints_dir=processed.constraints_dir,
             template_dir=processed.template_dir,
             extra_mols_dir=processed.extra_mols_dir,
@@ -1450,6 +1465,10 @@ def predict(  # noqa: C901, PLR0915, PLR0912
             affinity_mw_correction=affinity_mw_correction,
         )
         model_module.eval()
+        if batch_layout == "packed":
+            from boltz.model.modules.packed import enable_packed
+            enable_packed(model_module)
+            click.echo("Packed token/pair stacks, atom windows and MSA execution enabled.")
 
         trainer.callbacks[0] = pred_writer
         trainer.predict(

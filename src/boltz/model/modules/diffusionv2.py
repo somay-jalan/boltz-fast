@@ -304,6 +304,10 @@ class AtomDiffusion(Module):
     ):
         batch_size = atom_mask.shape[0]
         base_atom_mask = atom_mask
+        # Masks are unchanged throughout sampling. Transfer all counts once,
+        # avoiding a device synchronization per record at every noise draw.
+        max_atoms = base_atom_mask.shape[1]
+        valid_atom_counts = base_atom_mask.sum(dim=1).to("cpu").tolist()
         record_generators = []
         for record in network_condition_kwargs["feats"]["record"]:
             record_seed = int.from_bytes(
@@ -317,9 +321,8 @@ class AtomDiffusion(Module):
 
         def per_record_atom_noise(dtype):
             record_noise = []
-            max_atoms = base_atom_mask.shape[1]
             for record_idx, generator in enumerate(record_generators):
-                valid_atoms = int(base_atom_mask[record_idx].sum().item())
+                valid_atoms = int(valid_atom_counts[record_idx])
                 samples = []
                 for _ in range(multiplicity):
                     noise = torch.randn(
@@ -364,6 +367,32 @@ class AtomDiffusion(Module):
         num_sampling_steps = default(num_sampling_steps, self.num_sampling_steps)
         atom_mask = atom_mask.repeat_interleave(multiplicity, 0)
         coord_mask = atom_mask.to(dtype=torch.float32).unsqueeze(-1)
+
+        # Coordinates are record-major: [record, diffusion sample]. Keep the
+        # same sample offsets for every record to align repeated conditioning.
+        # Multiplicity and chunk membership do not change between steps.
+        samples_per_chunk = max(
+            1, min(max_parallel_samples // batch_size, multiplicity)
+        )
+        sample_ids_chunks = []
+        if samples_per_chunk < multiplicity:
+            for start in range(0, multiplicity, samples_per_chunk):
+                stop = min(start + samples_per_chunk, multiplicity)
+                sample_ids_chunks.append(
+                    (
+                        torch.cat(
+                            [
+                                torch.arange(
+                                    record_idx * multiplicity + start,
+                                    record_idx * multiplicity + stop,
+                                    device=atom_mask.device,
+                                )
+                                for record_idx in range(batch_size)
+                            ]
+                        ),
+                        stop - start,
+                    )
+                )
 
         # get the schedule, which is returned as (sigma, gamma) tuple, and pair up with the next sigma and gamma
         sigmas = self.sample_schedule(num_sampling_steps)
@@ -435,44 +464,34 @@ class AtomDiffusion(Module):
             atom_coords_noisy = atom_coords + eps
 
             with torch.no_grad():
-                atom_coords_denoised = torch.zeros_like(atom_coords_noisy)
-                # Coordinates are record-major: [record, diffusion sample].
-                # Limit the total number of coordinates in a network call, while
-                # keeping the same sample offsets for every record so the repeated
-                # conditioning tensors remain aligned with the coordinate tensors.
-                samples_per_chunk = max(
-                    1,
-                    min(max_parallel_samples // batch_size, multiplicity),
-                )
-                sample_ids_chunks = []
-                for start in range(0, multiplicity, samples_per_chunk):
-                    stop = min(start + samples_per_chunk, multiplicity)
-                    sample_ids_chunks.append(
-                        torch.cat(
-                            [
-                                torch.arange(
-                                    record_idx * multiplicity + start,
-                                    record_idx * multiplicity + stop,
-                                    device=atom_coords_noisy.device,
-                                )
-                                for record_idx in range(batch_size)
-                            ]
-                        )
-                    )
-
-                for sample_ids_chunk in sample_ids_chunks:
-                    chunk_multiplicity = sample_ids_chunk.numel() // batch_size
-                    atom_coords_denoised_chunk = self.preconditioned_network_forward(
-                        atom_coords_noisy[sample_ids_chunk],
+                if samples_per_chunk == multiplicity:
+                    # A single call needs no index gather, output allocation,
+                    # or scatter back into the original sample order.
+                    atom_coords_denoised = self.preconditioned_network_forward(
+                        atom_coords_noisy,
                         t_hat,
                         network_condition_kwargs=dict(
-                            multiplicity=chunk_multiplicity,
+                            multiplicity=multiplicity,
                             **network_condition_kwargs,
                         ),
                     )
-                    atom_coords_denoised[sample_ids_chunk] = (
-                        atom_coords_denoised_chunk * coord_mask[sample_ids_chunk]
+                    atom_coords_denoised = (atom_coords_denoised * coord_mask).to(
+                        atom_coords_noisy.dtype
                     )
+                else:
+                    atom_coords_denoised = torch.zeros_like(atom_coords_noisy)
+                    for sample_ids_chunk, chunk_multiplicity in sample_ids_chunks:
+                        atom_coords_denoised_chunk = self.preconditioned_network_forward(
+                            atom_coords_noisy[sample_ids_chunk],
+                            t_hat,
+                            network_condition_kwargs=dict(
+                                multiplicity=chunk_multiplicity,
+                                **network_condition_kwargs,
+                            ),
+                        )
+                        atom_coords_denoised[sample_ids_chunk] = (
+                            atom_coords_denoised_chunk * coord_mask[sample_ids_chunk]
+                        )
 
                 if steering_args["fk_steering"] and (
                     (

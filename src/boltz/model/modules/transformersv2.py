@@ -103,6 +103,11 @@ class DiffusionTransformer(Module):
         to_keys=None,
         multiplicity=1,
     ):
+        if getattr(self, "packed_inference", False) and not self.training and to_keys is None:
+            from boltz.model.modules.packed import diffusion_transformer
+            if not self.pair_bias_attn or bias is None or mask is None:
+                raise ValueError("Packed token attention requires pair biases and a mask")
+            return diffusion_transformer(self, a, s, bias, mask, multiplicity)
         if self.pair_bias_attn:
             B, N, M, D = bias.shape
             L = len(self.layers)
@@ -233,6 +238,9 @@ class AtomTransformer(Module):
         mask,  # Bool['b m'] | None = None
         multiplicity=1,
     ):
+        if getattr(self, "packed_inference", False) and not self.training:
+            from boltz.model.modules.packed import atom_transformer
+            return atom_transformer(self, q, c, bias, mask, multiplicity)
         W = self.attn_window_queries
         H = self.attn_window_keys
 
