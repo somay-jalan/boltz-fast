@@ -198,6 +198,7 @@ class AtomDiffusion(Module):
         compile_score: bool = False,
         alignment_reverse_diff: bool = False,
         synchronize_sigmas: bool = False,
+        solver: str = "euler",
     ):
         super().__init__()
         self.score_model = DiffusionModule(
@@ -229,6 +230,7 @@ class AtomDiffusion(Module):
         )
         self.alignment_reverse_diff = alignment_reverse_diff
         self.synchronize_sigmas = synchronize_sigmas
+        self.solver = solver
 
         self.token_s = score_model_args["token_s"]
         self.register_buffer("zero", torch.tensor(0.0), persistent=False)
@@ -302,6 +304,20 @@ class AtomDiffusion(Module):
         steering_args=None,
         **network_condition_kwargs,
     ):
+        solver = getattr(self, "solver", "euler")
+        if solver not in {"euler", "heun"}:
+            raise ValueError(f"Unknown diffusion solver: {solver}")
+        if solver == "heun":
+            if self.step_scale != 1.0 or (
+                self.training and self.step_scale_random is not None
+            ):
+                raise ValueError("EDM Heun requires step_scale=1.0 and no random step scale")
+            if any((steering_args or {}).get(key, False) for key in (
+                "fk_steering", "physical_guidance_update", "contact_guidance_update"
+            )):
+                raise ValueError("EDM Heun does not support potential guidance")
+            if default(num_sampling_steps, self.num_sampling_steps) < 2:
+                raise ValueError("EDM Heun requires at least two sampling steps")
         batch_size = atom_mask.shape[0]
         base_atom_mask = atom_mask
         # Masks are unchanged throughout sampling. Transfer all counts once,
@@ -650,6 +666,55 @@ class AtomDiffusion(Module):
             atom_coords_next = (
                 atom_coords_noisy + step_scale * (sigma_t - t_hat) * denoised_over_sigma
             )
+
+            if solver == "heun" and sigma_t > 0:
+                # EDM Heun: evaluate the Euler proposal, then average both slopes.
+                # The final sigma=0 step remains Euler, avoiding a division by zero.
+                # No new noise or coordinate augmentation occurs in the corrector.
+                with torch.no_grad():
+                    proposal = atom_coords_next * coord_mask
+                    if samples_per_chunk == multiplicity:
+                        corrected_denoised = self.preconditioned_network_forward(
+                            proposal,
+                            sigma_t,
+                            network_condition_kwargs=dict(
+                                multiplicity=multiplicity,
+                                **network_condition_kwargs,
+                            ),
+                        )
+                        corrected_denoised = (corrected_denoised * coord_mask).to(
+                            proposal.dtype
+                        )
+                    else:
+                        corrected_denoised = torch.zeros_like(proposal)
+                        for sample_ids_chunk, chunk_multiplicity in sample_ids_chunks:
+                            chunk_denoised = self.preconditioned_network_forward(
+                                proposal[sample_ids_chunk],
+                                sigma_t,
+                                network_condition_kwargs=dict(
+                                    multiplicity=chunk_multiplicity,
+                                    **network_condition_kwargs,
+                                ),
+                            )
+                            corrected_denoised[sample_ids_chunk] = (
+                                chunk_denoised * coord_mask[sample_ids_chunk]
+                            )
+                    if self.alignment_reverse_diff:
+                        # Keep the corrector in the predictor's coordinate frame.
+                        # Moving the proposal to a new frame would make the two
+                        # slopes incompatible when they are averaged below.
+                        with torch.autocast(proposal.device.type, enabled=False):
+                            corrected_denoised = weighted_rigid_align(
+                                corrected_denoised.float(),
+                                proposal.float(),
+                                atom_mask.float(),
+                                atom_mask.float(),
+                            ).to(proposal)
+                        corrected_denoised = corrected_denoised * coord_mask
+                    corrected_slope = (proposal - corrected_denoised) / sigma_t
+                    atom_coords_next = atom_coords_noisy + (sigma_t - t_hat) * (
+                        0.5 * denoised_over_sigma + 0.5 * corrected_slope
+                    )
 
             atom_coords = atom_coords_next
             atom_coords = atom_coords * coord_mask

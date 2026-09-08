@@ -129,6 +129,8 @@ class BoltzDiffusionParams:
 class Boltz2DiffusionParams:
     """Diffusion process parameters."""
 
+    solver: str = "euler"
+
     gamma_0: float = 0.8
     gamma_min: float = 1.0
     noise_scale: float = 1.003
@@ -874,6 +876,13 @@ def cli() -> None:
     default=5,
 )
 @click.option(
+    "--diffusion_solver",
+    type=click.Choice(["euler", "heun"]),
+    default="euler",
+    show_default=True,
+    help="Boltz-2 solver for both structure and affinity. Heun uses unit step scale.",
+)
+@click.option(
     "--step_scale",
     type=float,
     help=(
@@ -881,7 +890,8 @@ def cli() -> None:
         "which the diffusion process samples the distribution. "
         "The lower the higher the diversity among samples "
         "(recommended between 1 and 2). "
-        "Default is 1.638 for Boltz-1 and 1.5 for Boltz-2. "
+        "Default is 1.638 for Boltz-1 and 1.5 for Boltz-2 Euler. "
+        "EDM Heun requires 1.0. "
         "If not provided, the default step size will be used."
     ),
     default=None,
@@ -1095,6 +1105,7 @@ def predict(  # noqa: C901, PLR0915, PLR0912
     max_parallel_samples_affinity: int = 8,
     max_parallel_samples: Optional[int] = None,
     step_scale: Optional[float] = None,
+    diffusion_solver: str = "euler",
     write_full_pae: bool = False,
     write_full_pde: bool = False,
     output_format: Literal["pdb", "mmcif"] = "mmcif",
@@ -1124,6 +1135,17 @@ def predict(  # noqa: C901, PLR0915, PLR0912
     write_embeddings: bool = False,
 ) -> None:
     """Run predictions with Boltz."""
+    if diffusion_solver == "heun":
+        if model != "boltz2":
+            raise click.UsageError("EDM Heun is supported for Boltz-2 only.")
+        if step_scale not in (None, 1.0):
+            raise click.UsageError("EDM Heun requires --step_scale 1.0.")
+        if use_potentials or contact_guidance:
+            raise click.UsageError(
+                "EDM Heun requires --no_contact_guidance and no --use_potentials."
+            )
+        if sampling_steps < 2 or sampling_steps_affinity < 2:
+            raise click.UsageError("EDM Heun requires at least two sampling steps.")
     # If cpu, write a friendly warning
     if accelerator == "cpu":
         msg = "Running on CPU, this will be slow. Consider using a GPU."
@@ -1282,7 +1304,9 @@ def predict(  # noqa: C901, PLR0915, PLR0912
     # Set up model parameters
     if model == "boltz2":
         diffusion_params = Boltz2DiffusionParams()
-        step_scale = 1.5 if step_scale is None else step_scale
+        diffusion_params.solver = diffusion_solver
+        default_step_scale = 1.0 if diffusion_solver == "heun" else 1.5
+        step_scale = default_step_scale if step_scale is None else step_scale
         diffusion_params.step_scale = step_scale
         pairformer_args = PairformerArgsV2()
     else:
