@@ -308,7 +308,14 @@ class AtomDiffusion(Module):
         # avoiding a device synchronization per record at every noise draw.
         max_atoms = base_atom_mask.shape[1]
         valid_atom_counts = base_atom_mask.sum(dim=1).to("cpu").tolist()
+        # Upstream singleton arrays include the final partially filled query
+        # window. Exclude only padding added for other records in this batch.
+        window = self.score_model.atoms_per_window_queries
+        native_atom_counts = [
+            ((int(n) + window - 1) // window) * window for n in valid_atom_counts
+        ]
         record_generators = []
+        padding_generators = []
         for record in network_condition_kwargs["feats"]["record"]:
             record_seed = int.from_bytes(
                 hashlib.blake2b(record.id.encode(), digest_size=8).digest(),
@@ -318,6 +325,15 @@ class AtomDiffusion(Module):
             generator = torch.Generator(device=atom_mask.device)
             generator.manual_seed(seed)
             record_generators.append(generator)
+            # Preserve every existing valid-atom/augmentation random draw.
+            # Padding has an independent stream and remains record-local.
+            padding_seed = int.from_bytes(
+                hashlib.blake2b((record.id + ":upstream-padding").encode(), digest_size=8).digest(),
+                byteorder="little",
+            )
+            padding_generator = torch.Generator(device=atom_mask.device)
+            padding_generator.manual_seed((torch.initial_seed() + padding_seed) % (2**63 - 1))
+            padding_generators.append(padding_generator)
 
         def per_record_atom_noise(dtype):
             record_noise = []
@@ -331,7 +347,14 @@ class AtomDiffusion(Module):
                         device=base_atom_mask.device,
                         generator=generator,
                     )
-                    samples.append(F.pad(noise, (0, 0, 0, max_atoms - valid_atoms)))
+                    native_atoms = native_atom_counts[record_idx]
+                    padding_noise = torch.randn(
+                        (native_atoms - valid_atoms, 3), dtype=dtype,
+                        device=base_atom_mask.device,
+                        generator=padding_generators[record_idx],
+                    )
+                    noise = torch.cat((noise, padding_noise), dim=0)
+                    samples.append(F.pad(noise, (0, 0, 0, max_atoms - native_atoms)))
                 record_noise.append(torch.stack(samples))
             return torch.cat(record_noise, dim=0)
 
@@ -366,7 +389,12 @@ class AtomDiffusion(Module):
 
         num_sampling_steps = default(num_sampling_steps, self.num_sampling_steps)
         atom_mask = atom_mask.repeat_interleave(multiplicity, 0)
-        coord_mask = atom_mask.to(dtype=torch.float32).unsqueeze(-1)
+        native_counts = torch.tensor(native_atom_counts, device=atom_mask.device)
+        native_counts = native_counts.repeat_interleave(multiplicity, 0)
+        coord_mask = (
+            torch.arange(max_atoms, device=atom_mask.device)[None, :] < native_counts[:, None]
+        ).to(dtype=torch.float32).unsqueeze(-1)
+        center_denominator = native_counts.to(torch.float32)[:, None, None]
 
         # Coordinates are record-major: [record, diffusion sample]. Keep the
         # same sample offsets for every record to align repeated conditioning.
@@ -424,7 +452,7 @@ class AtomDiffusion(Module):
             random_R = torch.cat([value[0] for value in augmentations])
             random_tr = torch.cat([value[1] for value in augmentations])
             center = (atom_coords * coord_mask).sum(dim=-2, keepdim=True) / (
-                coord_mask.sum(dim=-2, keepdim=True) + 1e-8
+                center_denominator
             )
             atom_coords = (atom_coords - center) * coord_mask
             atom_coords = (
@@ -434,7 +462,7 @@ class AtomDiffusion(Module):
                 denoised_center = (
                     atom_coords_denoised * coord_mask
                 ).sum(dim=-2, keepdim=True) / (
-                    coord_mask.sum(dim=-2, keepdim=True) + 1e-8
+                    center_denominator
                 )
                 atom_coords_denoised = (
                     atom_coords_denoised - denoised_center
