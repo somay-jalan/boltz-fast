@@ -11,3 +11,5 @@ The corrector receives no additional random rotation or noise. With reverse-diff
 The experiment compares 50 and 100 steps in both stages, seeds 42 and 43, using the saved 87-case inputs and original checkpoint files. Structure kernels are enabled and affinity kernels disabled through the experiment harness, matching the saved Euler baselines. A four-case functional smoke test precedes the full runs. Reduced steps do not guarantee preserved prediction accuracy; benchmark results must be evaluated before adopting Heun.
 
 The benchmark YAMLs have no contact or pocket constraints. Contact guidance is explicitly disabled for Heun; it contributes no constraint forces to these baseline inputs.
+
+For installation, branch lineage, commands and publication validation, see [Native batching and EDM Heun branches](native_batching.md).

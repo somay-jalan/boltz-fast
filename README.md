@@ -18,6 +18,10 @@ Boltz is a family of models for biomolecular interaction prediction. Boltz-1 was
 
 All the code and weights are provided under MIT license, making them freely available for both academic and commercial uses. For more information about the model, see the [Boltz-1](https://doi.org/10.1101/2024.11.19.624167) and [Boltz-2](https://doi.org/10.1101/2025.06.14.659707) technical reports. To discuss updates, tools and applications join our [Slack channel](https://boltz.bio/join-slack).
 
+## Experimental native batching
+
+This branch contains native and packed batching plus the opt-in EDM Heun solver. Read the [branch, usage and validation guide](docs/native_batching.md) and [Heun solver notes](docs/edm_heun.md) before comparing it with pristine upstream. Euler remains the default solver.
+
 ## Installation
 
 > Note: we recommend installing boltz in a fresh python environment
