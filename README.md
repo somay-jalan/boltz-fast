@@ -1,3 +1,9 @@
+# Boltz Fast
+
+Native and packed batched inference for Boltz-2, with an optional EDM Heun diffusion solver. Euler remains the default. Based on the open-source Boltz code and weights; original license and scientific attribution are retained below.
+
+See the [batching and branch guide](docs/native_batching.md) for usage, solver restrictions and validation.
+
 <div align="center">
   <div>&nbsp;</div>
   <img src="docs/boltz2_title.png" width="300"/>
@@ -24,22 +30,15 @@ This branch contains native and packed batching plus the opt-in EDM Heun solver.
 
 ## Installation
 
-> Note: we recommend installing boltz in a fresh python environment
+Install this repository in a fresh Python environment to use its batching changes:
 
-Install boltz with PyPI (recommended):
-
-```
-pip install boltz[cuda] -U
-```
-
-or directly from GitHub for daily updates:
-
-```
-git clone https://github.com/jwohlwend/boltz.git
-cd boltz; pip install -e .[cuda]
+```sh
+git clone https://github.com/somay-jalan/boltz-fast.git
+cd boltz-fast
+pip install -e '.[cuda]'
 ```
 
-If you are installing on CPU-only or non-CUDA GPus hardware, remove `[cuda]` from the above commands. Note that the CPU version is significantly slower than the GPU version.
+The default `main` branch includes packed batching and the optional Heun solver. The Python package and CLI remain named `boltz`. Installing the upstream PyPI `boltz` package alone does not install these branch changes. For CPU-only installation, omit `[cuda]`; the batched experiments were validated on a GPU.
 
 ## Inference
 

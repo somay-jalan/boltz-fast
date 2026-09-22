@@ -1,23 +1,24 @@
 # Native batching and EDM Heun branches
 
-The `/home/boltz-original` working directory is a modified fork, not a pristine upstream checkout. Its push remote is `https://github.com/somay-jalan/boltz-community.git`; the repository name does not identify the algorithm used by an experiment.
+`boltz-fast` publishes the native batching and EDM Heun work originally developed in the `/home/boltz-original` server checkout. The canonical repository for this work is now `https://github.com/somay-jalan/boltz-fast.git`. The Python package and command remain named `boltz`.
 
 ## Branches and lineage
 
 | Branch | Purpose | Code provenance |
 |---|---|---|
+| `main` | Default branch: native batching, optional Heun solver, and current repository documentation | Same implementation as `feature/native-batched-edm-heun` |
 | `feature/native-batched-inference` | Native batch handling, packed layout, per-record randomness, and upstream-compatible native-padding centering; Euler solver | `c0ff971`, `1453124`, `d32b60f` |
 | `feature/native-batched-edm-heun` | All native batching changes plus an opt-in Heun corrector | Based on `d32b60f`; implementation commit `e11b933` |
 
-Both branches descend from upstream commit `b1ebfc46ecf57f5414e0d1a6f9027bbb122c53bc`. The local `main` tracks that upstream baseline; it is not the community fork's `origin/main`. Do not merge or replace either main branch simply to publish experimental code.
+Both branches descend from upstream commit `b1ebfc46ecf57f5414e0d1a6f9027bbb122c53bc`. The original implementation commits are preserved in the history. In this standalone repository, `main` and `feature/native-batched-edm-heun` initially share the same tip; `feature/native-batched-inference` retains the pre-Heun Euler implementation at `d32b60f`. The original upstream baseline can be inspected by its pinned commit.
 
 ## Running
 
 Install the checked-out branch into a suitable environment:
 
 ```sh
-git clone --branch feature/native-batched-edm-heun https://github.com/somay-jalan/boltz-community.git boltz-native
-cd boltz-native
+git clone https://github.com/somay-jalan/boltz-fast.git
+cd boltz-fast
 pip install -e '.[cuda]'
 ```
 
