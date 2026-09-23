@@ -1,0 +1,175 @@
+{
+  "status": "completed",
+  "target_count": 116,
+  "predictions_per_configuration": 580,
+  "seed": 42,
+  "settings": {
+    "seed": 42,
+    "recycles": 5,
+    "samples": 5,
+    "steps": 200,
+    "step_scale": 1.5,
+    "solver": "euler"
+  },
+  "baseline_batch_size": 1,
+  "packed_batch_size": 4,
+  "packed_pair_backend": "triton",
+  "baseline_is_historical": true,
+  "baseline_process_seconds": 4723.14835621,
+  "packed_process_seconds": 3373.3818202689995,
+  "packed_prediction_job_seconds": 3356.008205879,
+  "process_throughput_ratio": 1.4001226685431558,
+  "process_time_reduction_percent": 28.577686622236342,
+  "baseline_peak_device_gib": 68.4951171875,
+  "packed_peak_device_gib": 94.1982421875,
+  "packed_peak_tensor_allocation_gib": 77.8750524520874,
+  "allocation_warning_count": 9,
+  "failed_targets": 0,
+  "skipped_targets": 0,
+  "process_restarts": 0,
+  "comparison": {
+    "lddt": {
+      "targets": 116,
+      "baseline_mean": 0.854094827586207,
+      "candidate_mean": 0.8534482758620691,
+      "paired_mean_delta": -0.0006465517241379287,
+      "paired_target_bootstrap_95pct": [
+        -0.0030174568965517217,
+        0.0016293103448275857
+      ],
+      "candidate_wins": 52,
+      "ties": 8,
+      "candidate_losses": 56
+    },
+    "bb_lddt": {
+      "targets": 116,
+      "baseline_mean": 0.9085948275862068,
+      "candidate_mean": 0.9075086206896551,
+      "paired_mean_delta": -0.0010862068965517213,
+      "paired_target_bootstrap_95pct": [
+        -0.003431034482758619,
+        0.0011724137931034464
+      ],
+      "candidate_wins": 43,
+      "ties": 13,
+      "candidate_losses": 60
+    },
+    "dockq_ave_full": {
+      "targets": 56,
+      "baseline_mean": 0.6139107142857144,
+      "candidate_mean": 0.6125357142857143,
+      "paired_mean_delta": -0.0013750000000000047,
+      "paired_target_bootstrap_95pct": [
+        -0.023697767857142872,
+        0.01857142857142856
+      ],
+      "candidate_wins": 27,
+      "ties": 3,
+      "candidate_losses": 26
+    }
+  },
+  "per_record_ranking_audit": {
+    "lddt": {
+      "targets": 116,
+      "mean": 0.8535689655172415,
+      "delta_from_baseline": -0.0005258620689654325
+    },
+    "bb_lddt": {
+      "targets": 116,
+      "mean": 0.9076724137931033,
+      "delta_from_baseline": -0.0009224137931036491
+    },
+    "dockq_ave_full": {
+      "targets": 56,
+      "mean": 0.6125357142857143,
+      "delta_from_baseline": -0.001374999999999904
+    }
+  },
+  "ranking_changed_targets": [
+    "8IRQ",
+    "8WX1"
+  ],
+  "confidence_formula_mismatch_targets": 18,
+  "original_inputs_integrity": {
+    "checked": 833,
+    "missing": [],
+    "mismatched": [],
+    "passed": true
+  },
+  "archive": {
+    "file": "full-predictions.zip",
+    "bytes": 57027629,
+    "sha256": "95dda794d3b30d796812c5a2bfa5b2c1b2a8ea2de63710662a776b3e03bf0813"
+  },
+  "managed_run": "r_1b760dc1",
+  "vm": {
+    "machine_id": 513539,
+    "status": "Paused",
+    "gpu_type": "RTX-PRO6000",
+    "region": "IN1"
+  },
+  "timing_note": "Primary ratio uses full child-process times including new preflight/validation and driver polling overhead. Candidate prediction-job clock excludes preflight and final validation. Both include imports/loading and two process startups; neither includes shared MSA preparation, offline scoring or transfers. The baseline is historical; no repeated contemporaneous timing experiment was run.",
+  "accuracy_note": "Highest reported confidence selects one of five structures per target. 116 selected structures plus two alternative-ranked candidates were scored. Target bootstrap uses one seed and does not prove equivalence or measure variation across seeds. Scores cover protein accuracy and protein interfaces, not ligand pose or affinity.",
+  "per_target_extremes": {
+    "lddt": {
+      "largest_loss": {
+        "target": "8WQ8",
+        "delta": -0.06499999999999995
+      },
+      "largest_gain": {
+        "target": "8Y9K",
+        "delta": 0.05599999999999994
+      }
+    },
+    "bb_lddt": {
+      "largest_loss": {
+        "target": "8WQ8",
+        "delta": -0.07599999999999996
+      },
+      "largest_gain": {
+        "target": "8Y9K",
+        "delta": 0.05999999999999994
+      }
+    },
+    "dockq_ave_full": {
+      "largest_loss": {
+        "target": "8KA6",
+        "delta": -0.429
+      },
+      "largest_gain": {
+        "target": "8Y9K",
+        "delta": 0.28099999999999997
+      }
+    }
+  },
+  "outlier_oracle_diagnostics": {
+    "8KA6": {
+      "lddt": {
+        "baseline": 0.805,
+        "packed": 0.805
+      },
+      "bb_lddt": {
+        "baseline": 0.866,
+        "packed": 0.873
+      },
+      "dockq_ave_full": {
+        "baseline": 0.478,
+        "packed": 0.56
+      }
+    },
+    "8WQ8": {
+      "lddt": {
+        "baseline": 0.834,
+        "packed": 0.766
+      },
+      "bb_lddt": {
+        "baseline": 0.88,
+        "packed": 0.808
+      },
+      "dockq_ave_full": {
+        "baseline": 0.057,
+        "packed": 0.041
+      }
+    }
+  }
+}

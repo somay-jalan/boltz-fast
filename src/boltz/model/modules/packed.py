@@ -48,6 +48,7 @@ class Layout:
         self.pair_offsets_gpu = torch.tensor(self.pair_offsets, device=device, dtype=torch.int32)
         self.lengths_gpu = torch.tensor(lengths, device=device, dtype=torch.int32)
         self.is_dense = all(n == width for n in lengths)
+        self.kernel_tasks = {}
 
     def pack(self, x, pair=False):
         rank = 3 if pair else 2
@@ -120,12 +121,15 @@ def packed_context(forward):
     return wrapped
 
 
-def enable_packed(model):
+def enable_packed(model, pair_backend="sequential"):
     """Enable the optional implementation without changing checkpoint weights."""
     if model.training:
         raise ValueError("Call eval() before enabling packed inference")
+    if pair_backend not in {"sequential", "triton"}:
+        raise ValueError(f"Unknown packed pair backend: {pair_backend}")
     for module in model.modules():
         module.packed_inference = True
+        module.packed_pair_backend = pair_backend
 
 
 def segmented_attention(q, k, v, bias, mask, layout, bias_layout, multiplicity, inf):
@@ -164,7 +168,11 @@ def token_attention(module, s, z, mask, layout, bias_layout=None, multiplicity=1
 
 
 def pair_operation(module, values, masks, layout, use_kernels, attention=False):
-    """Independent record-sized kernels; no global square or batch padding."""
+    """Dispatch record-local pair operations without a padded global square."""
+    if getattr(module, "packed_pair_backend", "sequential") == "triton":
+        from boltz.model.modules.packed_triangles import triangle_attention, triangle_multiply
+        operation = triangle_attention if attention else triangle_multiply
+        return operation(module, values, masks, layout)
     results = []
     for n, value, mask in zip(layout.lengths, layout.parts(values, True), layout.parts(masks, True)):
         args = {"mask": mask, "use_kernels": use_kernels}

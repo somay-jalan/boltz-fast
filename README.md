@@ -28,17 +28,62 @@ All the code and weights are provided under MIT license, making them freely avai
 
 This branch contains native and packed batching plus the opt-in EDM Heun solver. Read the [branch, usage and validation guide](docs/native_batching.md) and [Heun solver notes](docs/edm_heun.md) before comparing it with pristine upstream. Euler remains the default solver.
 
+### Optimized fixed packed version
+
+The `feature/packed-triangle-kernels` branch is the optimized packed version.
+It fixes the per-record triangle dispatch bottleneck by running heterogeneous
+records through grouped Triton triangle multiplication and attention kernels.
+It also fixes contraction rounding to match the reference BF16 precision boundary.
+Other per-record operations remain; this is a performance fix, with the known
+confidence-ranking limitation documented in the [full report](docs/full_structure116.md).
+
+Enable the optimized backend explicitly after installing this branch:
+
+```sh
+boltz predict inputs --batch_layout packed --batch_size 4 \
+  --packed_pair_backend triton --seed 42
+```
+
+The backend requires CUDA, supports inference only, and remains opt-in; the
+sequential backend is still the default. See [implementation and CUDA tests](docs/packed_triangles.md).
+
+### Structure116 baseline and packed-kernel evaluation
+
+Full prediction completed on all 116 targets, producing 580 structures with the
+new packed B4 Triton backend. Compared with the saved original Boltz-2 B1 result:
+
+| Measurement | Original B1 | Packed B4 + Triton |
+|---|---:|---:|
+| Total inference process time | 78.72 min | **56.22 min** |
+| Protein lDDT | 0.8541 | 0.8534 |
+| Backbone lDDT | 0.9086 | 0.9075 |
+| Protein-interface DockQ (56 targets) | 0.6139 | 0.6125 |
+| Peak observed device memory | 68.50 GiB | 94.20 GiB |
+
+This is **1.40× throughput, with 28.6% less process time** on an RTX PRO 6000
+Blackwell. Mean accuracy scores are slightly lower; paired target bootstrap
+intervals include zero for all three differences. This one-seed experiment does
+not establish equivalence, and the timing baseline is historical. Some individual
+targets show substantial losses despite the close averages; the detailed report
+includes the largest changes and checks of all five samples on two outliers.
+
+Both configurations use Euler 200 steps, step scale 1.5, five recycles and five
+samples per target; the latter two are benchmark overrides, not CLI defaults.
+No targets were skipped or processes restarted. Nine allocation warnings were
+recovered internally and remain included in the timing. See the
+[full results, confidence-ranking audit and reproduction](docs/full_structure116.md).
+
 ## Installation
 
 Install this repository in a fresh Python environment to use its batching changes:
 
 ```sh
-git clone https://github.com/somay-jalan/boltz-fast.git
+git clone --branch feature/packed-triangle-kernels https://github.com/somay-jalan/boltz-fast.git
 cd boltz-fast
 pip install -e '.[cuda]'
 ```
 
-The default `main` branch includes packed batching and the optional Heun solver. The Python package and CLI remain named `boltz`. Installing the upstream PyPI `boltz` package alone does not install these branch changes. For CPU-only installation, omit `[cuda]`; the batched experiments were validated on a GPU.
+The command above installs the optimized fixed packed version. The default `main` branch contains the earlier packed implementation and optional Heun solver; select this feature branch to obtain the grouped Triton backend. The Python package and CLI remain named `boltz`. Installing the upstream PyPI `boltz` package alone does not install these branch changes. For CPU-only installation, omit `[cuda]`; the batched experiments were validated on a GPU.
 
 ## Inference
 
