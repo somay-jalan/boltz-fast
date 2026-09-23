@@ -1,0 +1,26 @@
+[
+  {
+    "phase": "control_full_smoke",
+    "process_seconds": 115.43149174299992,
+    "returncode": 0,
+    "peak_device_memory_mib": 61471
+  },
+  {
+    "phase": "control_full_remaining",
+    "process_seconds": 1154.8162508609998,
+    "returncode": 0,
+    "peak_device_memory_mib": 96389
+  },
+  {
+    "phase": "grouped_full_smoke",
+    "process_seconds": 110.45062228300003,
+    "returncode": 0,
+    "peak_device_memory_mib": 69285
+  },
+  {
+    "phase": "grouped_full_remaining",
+    "process_seconds": 1114.546715942,
+    "returncode": 0,
+    "peak_device_memory_mib": 85691
+  }
+]

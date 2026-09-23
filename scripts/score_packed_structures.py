@@ -136,7 +136,13 @@ def main():
                 "candidate_wins": int((delta > 0).sum()), "ties": int((delta == 0).sum()),
                 "candidate_losses": int((delta < 0).sum()),
             }
-        result["uncertainty_note"] = "One seed; target bootstrap does not establish equivalence or seed-to-seed variance. Historical runtime is not a contemporaneous controlled speed benchmark."
+        result["uncertainty_note"] = (
+            "One seed; target bootstrap does not establish equivalence or seed-to-seed variance."
+        )
+        if result["baseline_is_historical"]:
+            result["uncertainty_note"] += (
+                " Historical runtime is not a contemporaneous controlled speed benchmark."
+            )
     (args.output / "summary.json").write_text(json.dumps(result, indent=2))
     print(json.dumps({k: v for k, v in result.items() if k != "targets"}, indent=2))
 

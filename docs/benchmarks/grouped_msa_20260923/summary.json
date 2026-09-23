@@ -1,0 +1,715 @@
+{
+  "control_commit": "7d8233a0672539e92b8df790312d9943146b931f",
+  "candidate": "grouped packed MSA",
+  "primary_time_metric": "prediction_job_seconds",
+  "comparison": "Both arms packed B4 with Triton triangles; this isolates the grouped MSA follow-up.",
+  "settings": {
+    "seed": 42,
+    "recycles": 3,
+    "samples_per_target": 1,
+    "solver": "euler",
+    "steps": 200,
+    "step_scale": 1.5,
+    "targets": 116,
+    "cached_features_and_msas": true
+  },
+  "validation": {
+    "cuda_tests_passed": 142,
+    "new_grouped_msa_tests": 21,
+    "existing_msa_tests": 62,
+    "triangle_tests": 59,
+    "exact_equality": false
+  },
+  "full": {
+    "control": {
+      "process_seconds": 1270.2477426039998,
+      "prediction_job_seconds": 1258.6464555300001,
+      "model_seconds": 1192.7301164259998,
+      "peak_device_memory_gib": 94.1298828125,
+      "peak_tensor_allocation_gib": 77.87499618530273,
+      "allocator_warning_count": 11,
+      "finite_structures": 116,
+      "denoiser_evaluations": 23200,
+      "input_hashes_verified": 116,
+      "source_hashes_verified": 112
+    },
+    "grouped": {
+      "process_seconds": 1224.997338225,
+      "prediction_job_seconds": 1215.0246341830002,
+      "model_seconds": 1148.9116254829987,
+      "peak_device_memory_gib": 83.6826171875,
+      "peak_tensor_allocation_gib": 72.02441835403442,
+      "allocator_warning_count": 0,
+      "finite_structures": 116,
+      "denoiser_evaluations": 23200,
+      "input_hashes_verified": 116,
+      "source_hashes_verified": 114
+    },
+    "throughput_ratio": 1.0359020057040504,
+    "monitor_process_throughput_ratio": 1.0369391858798378,
+    "time_reduction_percent": 3.465772390280264
+  },
+  "operator_benchmarks": {
+    "large": [
+      {
+        "operation": "pwa",
+        "backend": "reference",
+        "shapes": [
+          [
+            16224,
+            1062
+          ]
+        ],
+        "seconds": [
+          0.19288330400013365,
+          0.1928705970003648,
+          0.192871247000312,
+          0.19285305799985508,
+          0.19284375699999146,
+          0.19286586699990949,
+          0.1928643600003852
+        ],
+        "median_seconds": 0.19286586699990949,
+        "comparison": {
+          "relative_l2": 0.000555786129552871,
+          "max_abs": 0.00030517578125,
+          "finite": true
+        },
+        "peak_allocated_gib": 13.252589702606201
+      },
+      {
+        "operation": "pwa",
+        "backend": "grouped",
+        "shapes": [
+          [
+            16224,
+            1062
+          ]
+        ],
+        "seconds": [
+          0.11059021100027167,
+          0.11057123099999444,
+          0.11061908100009532,
+          0.11060085999997682,
+          0.11035145400001056,
+          0.11060063199965953,
+          0.11081945900014034
+        ],
+        "median_seconds": 0.11060063199965953,
+        "comparison": {
+          "relative_l2": 0.000555786129552871,
+          "max_abs": 0.00030517578125,
+          "finite": true
+        },
+        "peak_allocated_gib": 6.773443698883057
+      },
+      {
+        "operation": "opm",
+        "backend": "reference",
+        "shapes": [
+          [
+            16224,
+            1062
+          ]
+        ],
+        "seconds": [
+          0.15725313300026755,
+          0.15725940299989816,
+          0.15729823499987106,
+          0.1572888639998382,
+          0.15723702500008585,
+          0.15723998500016023,
+          0.15724738499966406
+        ],
+        "median_seconds": 0.15725313300026755,
+        "comparison": {
+          "relative_l2": 0.0014037102228030562,
+          "max_abs": 0.0009765625,
+          "finite": true
+        },
+        "peak_allocated_gib": 11.08019495010376
+      },
+      {
+        "operation": "opm",
+        "backend": "grouped",
+        "shapes": [
+          [
+            16224,
+            1062
+          ]
+        ],
+        "seconds": [
+          0.11585448400001042,
+          0.11604876100000183,
+          0.11680673199998637,
+          0.11711845699983314,
+          0.11703439800021442,
+          0.11664551299963932,
+          0.11642256599998291
+        ],
+        "median_seconds": 0.11664551299963932,
+        "comparison": {
+          "relative_l2": 0.0014037102228030562,
+          "max_abs": 0.0009765625,
+          "finite": true
+        },
+        "peak_allocated_gib": 7.870877742767334
+      }
+    ],
+    "mixed": [
+      {
+        "operation": "pwa",
+        "backend": "reference",
+        "shapes": [
+          [
+            8192,
+            744
+          ],
+          [
+            1322,
+            812
+          ],
+          [
+            518,
+            286
+          ],
+          [
+            6832,
+            761
+          ]
+        ],
+        "seconds": [
+          0.1416431890002059,
+          0.1416521979999743,
+          0.14166026800012332,
+          0.14166335800018715,
+          0.14161426999999094,
+          0.14165109099985784,
+          0.14169063999997888
+        ],
+        "median_seconds": 0.1416521979999743,
+        "comparison": {
+          "relative_l2": 0.0005563232116401196,
+          "max_abs": 0.00048828125,
+          "finite": true
+        },
+        "peak_allocated_gib": 6.595720291137695
+      },
+      {
+        "operation": "pwa",
+        "backend": "grouped",
+        "shapes": [
+          [
+            8192,
+            744
+          ],
+          [
+            1322,
+            812
+          ],
+          [
+            518,
+            286
+          ],
+          [
+            6832,
+            761
+          ]
+        ],
+        "seconds": [
+          0.07155144599983032,
+          0.07157864500004507,
+          0.07154449500012561,
+          0.07155788599993684,
+          0.07159711499980403,
+          0.07155944599981012,
+          0.07153866499993455
+        ],
+        "median_seconds": 0.07155788599993684,
+        "comparison": {
+          "relative_l2": 0.0005563232116401196,
+          "max_abs": 0.00048828125,
+          "finite": true
+        },
+        "peak_allocated_gib": 6.000522136688232
+      },
+      {
+        "operation": "opm",
+        "backend": "reference",
+        "shapes": [
+          [
+            8192,
+            744
+          ],
+          [
+            1322,
+            812
+          ],
+          [
+            518,
+            286
+          ],
+          [
+            6832,
+            761
+          ]
+        ],
+        "seconds": [
+          0.11574254599963751,
+          0.11574666500018793,
+          0.11573208600020735,
+          0.11572696499979429,
+          0.11576589600008447,
+          0.11573427700022876,
+          0.11575555699982942
+        ],
+        "median_seconds": 0.11574254599963751,
+        "comparison": {
+          "relative_l2": 0.0008678807062096894,
+          "max_abs": 0.0009765625,
+          "finite": true
+        },
+        "peak_allocated_gib": 5.641080379486084
+      },
+      {
+        "operation": "opm",
+        "backend": "grouped",
+        "shapes": [
+          [
+            8192,
+            744
+          ],
+          [
+            1322,
+            812
+          ],
+          [
+            518,
+            286
+          ],
+          [
+            6832,
+            761
+          ]
+        ],
+        "seconds": [
+          0.06601407300013307,
+          0.06598678299997118,
+          0.0662473500001397,
+          0.0665200260000347,
+          0.06635051900002509,
+          0.06639208700016752,
+          0.06662415500022689
+        ],
+        "median_seconds": 0.06635051900002509,
+        "comparison": {
+          "relative_l2": 0.0008678807062096894,
+          "max_abs": 0.0009765625,
+          "finite": true
+        },
+        "peak_allocated_gib": 6.234887599945068
+      }
+    ],
+    "small": [
+      {
+        "operation": "pwa",
+        "backend": "reference",
+        "shapes": [
+          [
+            8192,
+            139
+          ],
+          [
+            65,
+            385
+          ],
+          [
+            1,
+            412
+          ],
+          [
+            1025,
+            79
+          ]
+        ],
+        "seconds": [
+          0.010205270999904315,
+          0.010200292000263289,
+          0.0101941119996809,
+          0.010199251999893022,
+          0.010200381000231573,
+          0.010193321999850014,
+          0.010196451999945566
+        ],
+        "median_seconds": 0.010199251999893022,
+        "comparison": {
+          "relative_l2": 0.00022505858214572072,
+          "max_abs": 0.00048828125,
+          "finite": true
+        },
+        "peak_allocated_gib": 2.8001604080200195
+      },
+      {
+        "operation": "pwa",
+        "backend": "grouped",
+        "shapes": [
+          [
+            8192,
+            139
+          ],
+          [
+            65,
+            385
+          ],
+          [
+            1,
+            412
+          ],
+          [
+            1025,
+            79
+          ]
+        ],
+        "seconds": [
+          0.004621407000286126,
+          0.004614237999703619,
+          0.004619897000338824,
+          0.004610647999925277,
+          0.004621456999757356,
+          0.004611976999967737,
+          0.00461396800028524
+        ],
+        "median_seconds": 0.004614237999703619,
+        "comparison": {
+          "relative_l2": 0.00022505858214572072,
+          "max_abs": 0.00048828125,
+          "finite": true
+        },
+        "peak_allocated_gib": 2.0044474601745605
+      },
+      {
+        "operation": "opm",
+        "backend": "reference",
+        "shapes": [
+          [
+            8192,
+            139
+          ],
+          [
+            65,
+            385
+          ],
+          [
+            1,
+            412
+          ],
+          [
+            1025,
+            79
+          ]
+        ],
+        "seconds": [
+          0.008308528000270599,
+          0.008305346999804897,
+          0.008294698000099743,
+          0.008302276999984315,
+          0.008297207999930833,
+          0.008296277000226837,
+          0.008304877999762539
+        ],
+        "median_seconds": 0.008302276999984315,
+        "comparison": {
+          "relative_l2": 5.2914514526491985e-05,
+          "max_abs": 0.001953125,
+          "finite": true
+        },
+        "peak_allocated_gib": 1.205014705657959
+      },
+      {
+        "operation": "opm",
+        "backend": "grouped",
+        "shapes": [
+          [
+            8192,
+            139
+          ],
+          [
+            65,
+            385
+          ],
+          [
+            1,
+            412
+          ],
+          [
+            1025,
+            79
+          ]
+        ],
+        "seconds": [
+          0.003153288000248722,
+          0.0031529470002169546,
+          0.0031526570001005894,
+          0.0031547979997412767,
+          0.0031479869999202492,
+          0.0031564569999318337,
+          0.003153897999709443
+        ],
+        "median_seconds": 0.003153288000248722,
+        "comparison": {
+          "relative_l2": 5.2914514526491985e-05,
+          "max_abs": 0.001953125,
+          "finite": true
+        },
+        "peak_allocated_gib": 0.7886443138122559
+      }
+    ],
+    "shallow": [
+      {
+        "operation": "pwa",
+        "backend": "reference",
+        "shapes": [
+          [
+            1,
+            412
+          ],
+          [
+            1,
+            387
+          ],
+          [
+            1,
+            17
+          ],
+          [
+            1,
+            79
+          ]
+        ],
+        "seconds": [
+          0.0022280100001808023,
+          0.0021658109999407316,
+          0.002143691000128456,
+          0.002153990999886446,
+          0.0022332399998958863,
+          0.0021775099999103986,
+          0.0021433909996630973
+        ],
+        "median_seconds": 0.0021658109999407316,
+        "comparison": {
+          "relative_l2": 0.0003662017988972366,
+          "max_abs": 0.0001220703125,
+          "finite": true
+        },
+        "peak_allocated_gib": 0.31034135818481445
+      },
+      {
+        "operation": "pwa",
+        "backend": "grouped",
+        "shapes": [
+          [
+            1,
+            412
+          ],
+          [
+            1,
+            387
+          ],
+          [
+            1,
+            17
+          ],
+          [
+            1,
+            79
+          ]
+        ],
+        "seconds": [
+          0.000632122000297386,
+          0.0006305010001597111,
+          0.000635641999906511,
+          0.0006290710002758715,
+          0.0006314120000752155,
+          0.0006387010002981697,
+          0.0006326819998321298
+        ],
+        "median_seconds": 0.000632122000297386,
+        "comparison": {
+          "relative_l2": 0.0003662017988972366,
+          "max_abs": 0.0001220703125,
+          "finite": true
+        },
+        "peak_allocated_gib": 0.422086238861084
+      },
+      {
+        "operation": "opm",
+        "backend": "reference",
+        "shapes": [
+          [
+            1,
+            412
+          ],
+          [
+            1,
+            387
+          ],
+          [
+            1,
+            17
+          ],
+          [
+            1,
+            79
+          ]
+        ],
+        "seconds": [
+          0.0037626990001626837,
+          0.0037305490000107966,
+          0.0037450899999385,
+          0.0037310390002858185,
+          0.0037270399998305948,
+          0.003733889999693929,
+          0.0037510490001295693
+        ],
+        "median_seconds": 0.003733889999693929,
+        "comparison": {
+          "relative_l2": 7.133562576200347e-06,
+          "max_abs": 0.00390625,
+          "finite": true
+        },
+        "peak_allocated_gib": 0.49876928329467773
+      },
+      {
+        "operation": "opm",
+        "backend": "grouped",
+        "shapes": [
+          [
+            1,
+            412
+          ],
+          [
+            1,
+            387
+          ],
+          [
+            1,
+            17
+          ],
+          [
+            1,
+            79
+          ]
+        ],
+        "seconds": [
+          0.0013049829999545182,
+          0.0012975119998372975,
+          0.0012941530003445223,
+          0.001295691999985138,
+          0.0012942029998157523,
+          0.00130330199999662,
+          0.0013098520003040903
+        ],
+        "median_seconds": 0.0012975119998372975,
+        "comparison": {
+          "relative_l2": 7.133562576200347e-06,
+          "max_abs": 0.00390625,
+          "finite": true
+        },
+        "peak_allocated_gib": 0.4704303741455078
+      }
+    ]
+  },
+  "hardware_software": {
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "torch": "2.14.0+cu130",
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]"
+  },
+  "checkpoint_sha256": "090e82ac8c92f5e943fa1b39e7410a44027bea7243c0bbb3caa67a77fc1428e1",
+  "accuracy": {
+    "lddt": {
+      "targets": 116,
+      "baseline_mean": 0.8501637931034483,
+      "candidate_mean": 0.8498965517241379,
+      "paired_mean_delta": -0.00026724137931034364,
+      "paired_target_bootstrap_95pct": [
+        -0.0014827586206896527,
+        0.0008275862068965515
+      ],
+      "candidate_wins": 11,
+      "ties": 81,
+      "candidate_losses": 24
+    },
+    "bb_lddt": {
+      "targets": 116,
+      "baseline_mean": 0.9047241379310346,
+      "candidate_mean": 0.9044655172413792,
+      "paired_mean_delta": -0.0002586206896551731,
+      "paired_target_bootstrap_95pct": [
+        -0.001594827586206898,
+        0.0008278017241379277
+      ],
+      "candidate_wins": 13,
+      "ties": 84,
+      "candidate_losses": 19
+    },
+    "dockq_ave_full": {
+      "targets": 56,
+      "baseline_mean": 0.5906964285714286,
+      "candidate_mean": 0.5885,
+      "paired_mean_delta": -0.0021964285714285736,
+      "paired_target_bootstrap_95pct": [
+        -0.006500000000000006,
+        0.0003928571428571431
+      ],
+      "candidate_wins": 6,
+      "ties": 42,
+      "candidate_losses": 8
+    }
+  },
+  "timing_scope": "Primary prediction_job_seconds is a precise in-process clock covering library imports, checkpoint loading, inference and output writing, after frozen-input preflight. Complete process clocks include polling lag up to five seconds per phase; device memory is sampled every five seconds. Model clocks synchronize at batch boundaries. Two fresh processes per arm (smoke4 + remaining112). Kernel/disk cache state is not isolated.",
+  "uncertainty": "One seed and one run per arm. Target bootstrap intervals do not establish equivalence or seed-to-seed variance. Warm operator and full-model timing scopes differ.",
+  "raw_archive": {
+    "file": "grouped-msa-final-evidence.zip",
+    "bytes": 23272699,
+    "sha256": "ea6d2a9cfa0524bdcc8e9eb3a54d147bf577f1c616f2f49d2e20267dabb2b1ef"
+  },
+  "gpu_cleanup": {
+    "machine_id": 514089,
+    "status": "Paused",
+    "gpu_type": "RTX-PRO6000",
+    "region": "IN1",
+    "num_gpus": 1
+  },
+  "managed_runs": {
+    "control_full": "r_cb664829",
+    "candidate_validation": "r_9714c5eb",
+    "candidate_full": "r_73d71455",
+    "grouped_profile_and_archive": "r_7213431e"
+  },
+  "accuracy_outliers": {
+    "largest_lddt_loss": {
+      "target": "8WQ8",
+      "before": 0.73,
+      "after": 0.68,
+      "delta": -0.05
+    },
+    "largest_bb_lddt_loss": {
+      "target": "8WQ8",
+      "before": 0.785,
+      "after": 0.725,
+      "delta": -0.06
+    },
+    "largest_dockq_loss": {
+      "target": "9BCE",
+      "before": 0.793,
+      "after": 0.692,
+      "delta": -0.101
+    },
+    "largest_lddt_gain": {
+      "target": "8TL8",
+      "before": 0.379,
+      "delta": 0.038,
+      "after": 0.417
+    }
+  }
+}

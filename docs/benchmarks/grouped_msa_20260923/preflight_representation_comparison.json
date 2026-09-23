@@ -1,0 +1,30 @@
+[
+  {
+    "batch": 0,
+    "representation": "s",
+    "exact": false,
+    "relative_l2": 0.0016088573029264808,
+    "max_abs": 2.703857421875
+  },
+  {
+    "batch": 0,
+    "representation": "z",
+    "exact": false,
+    "relative_l2": 0.0044724117033183575,
+    "max_abs": 6.620929718017578
+  },
+  {
+    "batch": 1,
+    "representation": "s",
+    "exact": false,
+    "relative_l2": 0.0014891751343384385,
+    "max_abs": 0.7117919921875
+  },
+  {
+    "batch": 1,
+    "representation": "z",
+    "exact": false,
+    "relative_l2": 0.005642230622470379,
+    "max_abs": 1.57720947265625
+  }
+]

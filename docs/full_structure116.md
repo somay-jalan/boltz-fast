@@ -21,7 +21,9 @@ The original B1 source is pristine upstream
 `1e3f292306a542dd8dd68a0c350d95386a8ebcbd` plus the grouped triangle changes,
 published as [`e331765`](https://github.com/somay-jalan/boltz-fast/commit/e3317655b64041b6f866585ca3c03c620a40f384).
 These full-prediction measurements predate the subsequent MSA optimizations;
-check out that commit to reproduce this exact source version.
+check out that commit to reproduce this exact source version. The later
+[grouped MSA report](grouped_msa.md) compares default-setting full predictions
+against the previous packed implementation; its settings and baseline differ.
 The comparison measures the complete packed implementation against pristine
 upstream; it does not isolate the incremental triangle-kernel contribution.
 The separate [Pairformer experiment](packed_triangles.md) compares triangle

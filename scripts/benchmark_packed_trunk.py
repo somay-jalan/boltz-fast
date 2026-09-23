@@ -146,6 +146,28 @@ def timed(obj, attr, key):
 
 def instrument_msa(model):
     """Use stream events without synchronizing after each record operation."""
+    if options.backend == "triton":
+        from boltz.model.modules import grouped_msa
+
+        for key in ("pair_weighted_averaging", "outer_product_mean"):
+            original = getattr(grouped_msa, key)
+
+            def measured_group(*args, _original=original, _key=key, **kwargs):
+                start = torch.cuda.Event(enable_timing=True)
+                end = torch.cuda.Event(enable_timing=True)
+                start.record()
+                before = time.perf_counter()
+                output = _original(*args, **kwargs)
+                dispatch = time.perf_counter() - before
+                end.record()
+                msa_events.append((
+                    _key, tuple(args[1].shape), start, end, dispatch,
+                    args[-1].shapes,
+                ))
+                return output
+
+            setattr(grouped_msa, key, measured_group)
+        return
     for layer in model.msa_module.layers:
         for key in ("pair_weighted_averaging", "outer_product_mean"):
             operation = getattr(layer, key)
@@ -159,7 +181,7 @@ def instrument_msa(model):
                 output = _original(*args, **kwargs)
                 dispatch = time.perf_counter() - before
                 end.record()
-                msa_events.append((_key, tuple(args[0].shape), start, end, dispatch))
+                msa_events.append((_key, tuple(args[0].shape), start, end, dispatch, None))
                 return output
 
             operation.forward = measured
@@ -168,11 +190,13 @@ def instrument_msa(model):
 def collect_msa_profile():
     # The caller already synchronized at the final Pairformer boundary.
     grouped = {}
-    for key, shape, start, end, dispatch in msa_events:
-        name = key + ":" + "x".join(map(str, shape))
+    for key, shape, start, end, dispatch, packed_shapes in msa_events:
+        name = key + ":" + repr((shape, packed_shapes))
         row = grouped.setdefault(name, {
             "operation": key, "input_shape": list(shape), "calls": 0,
             "cuda_event_ms": 0.0, "cpu_dispatch_seconds": 0.0,
+            "dispatch_kind": "grouped" if packed_shapes else "per_record",
+            "packed_shapes": packed_shapes,
         })
         row["calls"] += 1
         row["cuda_event_ms"] += start.elapsed_time(end)

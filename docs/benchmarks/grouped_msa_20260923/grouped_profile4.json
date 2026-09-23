@@ -1,0 +1,938 @@
+{
+  "metadata": {
+    "repo": "/home/boltz-fast",
+    "commit": "1e3f292306a542dd8dd68a0c350d95386a8ebcbd",
+    "targets": [
+      "8F9Q",
+      "8K11",
+      "8PO5",
+      "8PVS"
+    ],
+    "batch_sizes": [
+      1,
+      2,
+      4
+    ],
+    "batch_layout": "packed",
+    "inference_seed": 42,
+    "seed_note": "Fixed seed for reproducible MSA subsampling; model and recycling settings remain CLI defaults.",
+    "cache": "/home/boltz_finetuning_trial/structure116_20260909/cache",
+    "source_hashes": {
+      "src/boltz/__init__.py": "17ffaca374b8d2266b499f3d19ee134ba699ab05b2657abf1f801718395b03f8",
+      "src/boltz/main.py": "e64c27f51543a42ec54ef96d997caacde5015c9007fea36e7e74f06282a1daa1",
+      "src/boltz/model/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/const.py": "d4cfbcf19e8791f298e8c90db6a723ddbf4ffa85fdc445e5ba1dea33fbbc74d5",
+      "src/boltz/data/mol.py": "99a3a93c71065f55555c220563aa5034617b8140593c07e04afb8f7f640ed727",
+      "src/boltz/data/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/types.py": "e7e5ede40e0c208bcb966acd04caebb3b017e8a50b85b1aa3cae4cdf83b71707",
+      "src/boltz/data/pad.py": "3b808638e7394f016eb9678fee12a330822c96375f2e3f9526d5d07955c5c7cb",
+      "src/boltz/model/layers/attentionv2.py": "ae9bbc1eeb56c8dcd403d49693c84cd616ffd6772226364214ffd61d328cd8da",
+      "src/boltz/model/layers/dropout.py": "cb22161a9683a8d9d16866f4fd3d1ece2cce663e2e4ed738bcd3bd23f47a77b6",
+      "src/boltz/model/layers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/layers/triangular_mult.py": "458319d62723c19a672fa650b11a601feaff8ee195179e37e6a43b34a92b3a94",
+      "src/boltz/model/layers/transition.py": "cc50a51a6aa669455420549de16e29558d7b96f8a7d8da6f69930ab9e738cf37",
+      "src/boltz/model/layers/pairformer.py": "2865087e5b66e9cebeb7a916b53363f3bdc5aa7e7b465dc07c6b0247ac294348",
+      "src/boltz/model/layers/outer_product_mean.py": "c7966c776a9f5b8075f2d75c59ec88cc0ea2ba38694b568167c64ede619a774c",
+      "src/boltz/model/layers/attention.py": "ae47793d3228541d644b30e706b65fbade03a041ca1c10b0b836f5a7425f49c9",
+      "src/boltz/model/layers/relative.py": "7cb3b00031b95430dd1f61aa8acf8be8bc3c867586c423e37d5eadf2461e1087",
+      "src/boltz/model/layers/pair_averaging.py": "5d7662a723a5c59bf8411e1493670851ef0ec3f5e9af8e5e102aac5a8b8d015b",
+      "src/boltz/model/layers/initialize.py": "2a72bdb547c6bc25a47706dc2ef258a0bf969a5a3d61c21c281b5dad76941b7d",
+      "src/boltz/model/layers/confidence_utils.py": "50cc0fe50e6088127c04ae715875e612c0f8a690ee8114b86a5ad41aebc63db7",
+      "src/boltz/model/modules/confidencev2.py": "3132daafb4f1d964be1a3531607a904cc36d5d13c542a9ece302295ff26f8f1c",
+      "src/boltz/model/modules/diffusion_conditioning.py": "6500f3bd894c27d072581810be5548250eba18f1e400af637d554aebc20ce719",
+      "src/boltz/model/modules/diffusion.py": "1db22472de8e7cd9ea135cce44300736a20ce94a2a0c3f77b5a8e12b1f7852d6",
+      "src/boltz/model/modules/utils.py": "c4645df77c0cd6bfa957a8d1d8549be6a9effd3a760774d05ba84d3466a151e1",
+      "src/boltz/model/modules/diffusionv2.py": "46d9ea4f3ea901ec20658f02b3f65880ef9c9984d1b92fe682e392b79c779821",
+      "src/boltz/model/modules/encoders.py": "cd7410792cd48dfdf28294bf7ab017584a7193cfbad94f0259c0bf5d357db276",
+      "src/boltz/model/modules/affinity.py": "164b48db0ae40eab2318724ebafcd5ad92bbf0c38f8d4eb940dd25eac07540f4",
+      "src/boltz/model/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/modules/transformersv2.py": "a030ae7a12c3a29fb8f5aca77cd749dfac531489ceebf1a0ee1eee3529e3c50d",
+      "src/boltz/model/modules/trunkv2.py": "985b949b96475ad24e86cfe3f4791a74de864541336e6dd7bfe8fea39420569f",
+      "src/boltz/model/modules/packed_kernels.py": "e4c13082cc5438deed9c5b1dcbc320bed82a0321397983c004875e03c76214b0",
+      "src/boltz/model/modules/packed.py": "9ccb0746f2cbed80c8a82ddbfb4f623c4a3515111c080a146b77927cce0bcee2",
+      "src/boltz/model/modules/trunk.py": "44b4e5b73714d1032cd8ae680abcd5715e38b7dd06991f9b3e1692ae5f4e898d",
+      "src/boltz/model/modules/transformers.py": "2e427fb4940106053a99f4eba9de9966eda3abb1755a93736207a6577fb5b74f",
+      "src/boltz/model/modules/confidence.py": "af156ef9ac4eb991506b6950b6e1f87e9d466e97c11c295f22a856eaf4d71c5d",
+      "src/boltz/model/modules/encodersv2.py": "2938af17252607d056106fc04a3afa0ea96b145fa7485764ebf33d646c99e0d4",
+      "src/boltz/model/modules/confidence_utils.py": "2b71b1e9b675544d8cfc435b27df2e2adb719319ea44f94fffb806a05359c88c",
+      "src/boltz/model/optim/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/optim/scheduler.py": "9c1e23cf4099e294789f4f0b427804c4bfe937270875823c0175681cf9d9590f",
+      "src/boltz/model/optim/ema.py": "ae3d5df44e53589d84516eb3fca86b80e1007bf8f3077763ecee65c099e9acc7",
+      "src/boltz/model/loss/confidencev2.py": "3c58b678c5c78735ed3f5d78e74e3fe4ccf0bfc6a46f75e6e1961e1ef07b5a24",
+      "src/boltz/model/loss/diffusion.py": "e71b74b36a09a4f31241de704fc31fe4bcca821a0abbef035cf3872f77b81076",
+      "src/boltz/model/loss/validation.py": "818a5b6a0f66ba58391c93d78ce50568c57d5d2617fecd9b210d22623880a30d",
+      "src/boltz/model/loss/diffusionv2.py": "c7eca07579fde88efb6c232ccd7b3964721cb91c70f17df1583de5f43cbe503b",
+      "src/boltz/model/loss/bfactor.py": "cd7f4922518011347734c71ba6d0118f34ab870586feb5ab1bca47ac75ab13ff",
+      "src/boltz/model/loss/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/loss/distogramv2.py": "74580c1b0a5d2cae3eb241c9c2fa44446d7429f1776543754fdfe1523fa25900",
+      "src/boltz/model/loss/distogram.py": "79006491376335f9e46b480c34570c797fe8ecacec4d8e134d97e6fa80db5ee0",
+      "src/boltz/model/loss/confidence.py": "ca018acad7e8a7ccf05e58dd9625623f45c62816e70a03dc076e5fbf53d47808",
+      "src/boltz/model/models/boltz1.py": "c3d605c51f27ae21ff6712b33c41a0667ebe03017aca25875789926619f3620a",
+      "src/boltz/model/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/models/boltz2.py": "725dbf108ac6008f285ff0cef08b1f5d752e9f728a986c4c6ff97c1eac927078",
+      "src/boltz/model/potentials/schedules.py": "3c4fe0ca97a122e8d3148dc7e5401b2ac1b112f3806a2e98351d719086e9534f",
+      "src/boltz/model/potentials/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/potentials/potentials.py": "151d046379920e881db73d2eca4f0f3e01edc4c7a4cafb6cf8af4b262a40d580",
+      "src/boltz/model/layers/triangular_attention/primitives.py": "d7245ffe8eefa580c693967e047da9950ed2b366c3595804e19a4477d789a412",
+      "src/boltz/model/layers/triangular_attention/utils.py": "1236df24edde965ec06fcbfc006ef3b16f0a9359fa6e519f0b21cf47e34ecdb5",
+      "src/boltz/model/layers/triangular_attention/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/layers/triangular_attention/attention.py": "deaaa0c28d2864d630d83c586d3d6b3f3499909cad01579753ce1c35a9c465c7",
+      "src/boltz/data/feature/featurizer.py": "fb0a7ecbbb42d5e02ef85d26e399a4bbb807773bcb5fbb3149a50923f697f860",
+      "src/boltz/data/feature/symmetry.py": "244ab11b85dc72ceeae14288c4b3d42d7b2fe70622344dc164c0c7d26b0168d0",
+      "src/boltz/data/feature/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/feature/featurizerv2.py": "c4243c6cc56936776cf4fea42abd06bdcd4fc0538429de0fa6e8e7a9be243759",
+      "src/boltz/data/parse/csv.py": "1dcabcac95b69e37336a112bf237ddfe8fb3c4b68d4a0277608a02f6cac8aa9c",
+      "src/boltz/data/parse/fasta.py": "63828f22d66a859dcc7a3ecfa3799dcdf6c44f2a472fef494f8d34962b4654f4",
+      "src/boltz/data/parse/schema.py": "c0dae4c89c4c4a22175a433b5a0c68860329d2a292c76224328bdde19b73b743",
+      "src/boltz/data/parse/a3m.py": "2399c3d7a918556d4d3ca78b10c9bb2381a7110aed664f5b16dc70f3dc262a2d",
+      "src/boltz/data/parse/mmcif.py": "db99045c2931f8eb9a6b002cedc773d1fc5d46ee7f0823b4015d34bbce0fae34",
+      "src/boltz/data/parse/pdb.py": "7aa50724cd70fdbd8a4acaeba8ceca0bd76ba9cc95099592a1ddcd1e53081a69",
+      "src/boltz/data/parse/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/parse/yaml.py": "19115132d0c3e0f4383c8a40fd2d638f4bd1684bb62e565dfe0e2b375cd4acda",
+      "src/boltz/data/parse/mmcif_with_constraints.py": "5876197244aa530bbe35bf6f9959b11e60bbbb1c15ac5ec05547952ac739c064",
+      "src/boltz/data/msa/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/msa/mmseqs2.py": "7537c23ca2d6863639187b8815011d592ee433bb145e6fdc86082ca836d3a6e7",
+      "src/boltz/data/write/utils.py": "d8fcef78ce2a67b01a76bbb5433a22d83862b7fb382d7973e1c797a46262e32d",
+      "src/boltz/data/write/mmcif.py": "ebf4c5773903bb4f5dbe8121ece2def65855c7f5947157586cca74d26ec3337c",
+      "src/boltz/data/write/writer.py": "448634966bdfaafdff8930b1590dcb79d1b5cae408d0eb7bdc11790aea19fa78",
+      "src/boltz/data/write/pdb.py": "a7ec3450deaec04fe4c030a99e778df5ed23a6f483b286d10fed00fa22aa6db9",
+      "src/boltz/data/write/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/sample/sampler.py": "2d757814b40f74c0bf8dae0c8cf8f4922704aebf145d25ab29e84f045e733b14",
+      "src/boltz/data/sample/cluster.py": "f52c7ca8fef3199380c84b29c1816d0936c64c1667b8dfb37c22856db03fea82",
+      "src/boltz/data/sample/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/sample/distillation.py": "001cecb76141aff139e0aa995881dcd5b62d298afbf65c5124cecf9d2e227cad",
+      "src/boltz/data/sample/random.py": "8e67a79c335f92eab6501ca7e79c2b413c0d3c2381baeebf8c1253e15ada2f6f",
+      "src/boltz/data/filter/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/tokenize/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/tokenize/tokenizer.py": "f689243bcf40d51bd0779b5c5bd54b20a6424afbd400ba2ccb68ad74dd660c81",
+      "src/boltz/data/tokenize/boltz2.py": "e35aeb4b1c63df7abc402cf71ac3261447fd2374e557ab1aebd57ce4ff054422",
+      "src/boltz/data/tokenize/boltz.py": "53c62f3952d95f8d523a258375b0d23431336f0c19db218207ef0c4381f68cd3",
+      "src/boltz/data/crop/affinity.py": "36a1adbc8f3788eb561839805704e95f2233c5e4920070dab860ab9b1aafb18b",
+      "src/boltz/data/crop/cropper.py": "0460e017035550fc8166f72a9c9c0fc87fc87d9d4d018099fca3306d07f81cae",
+      "src/boltz/data/crop/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/crop/boltz.py": "6e5a0ff6f93a726288678cd9a0ed3821785ba2e488105bca6f1054a0b1034071",
+      "src/boltz/data/module/inferencev2.py": "5a63b752b8d862dd5050d7e8f81ed5e45371e5e8b7ead573bfdfe02cb0b597df",
+      "src/boltz/data/module/trainingv2.py": "66c6141d85f17ee3e02296d3c028f940b3b45cafffc63b2a230e8601148d196d",
+      "src/boltz/data/module/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/module/inference.py": "3f19e1cc43cb6f2815b8f088ad3b4cdd18903b42c56e4daaa7576c332d6881f7",
+      "src/boltz/data/module/training.py": "9a4e3f1487e1056b97ecc2ee50b584a059c6dd8949040a02ab81a20f3c868030",
+      "src/boltz/data/filter/static/filter.py": "2bb4ae77861327b8bd44d2bb68f6ccd2e22e3bfd577cbae466b3ca823563eb22",
+      "src/boltz/data/filter/static/polymer.py": "2cdb1032c38e9e162978ab8cf404ad92da1340f3191371f4caee26460fa3c0f7",
+      "src/boltz/data/filter/static/ligand.py": "2da982f99f488d88f70e67f1c0c1663db28106144c6f2dee5908fbe300d65497",
+      "src/boltz/data/filter/static/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/filter/dynamic/subset.py": "c49fcb51e2d635af432046f1a07e3c2e9fc6d17374acb17d7a9e97c9f0ecfaa7",
+      "src/boltz/data/filter/dynamic/resolution.py": "38b84f8f462e992f2de39c7440a2c173a1116f04aa6c539907ca6e11dd7b51f6",
+      "src/boltz/data/filter/dynamic/filter.py": "ae7ca9f3e84258c1df3954ca6c3a3ed000efc35ce8bc6c23fd8f8fb8ffe9c625",
+      "src/boltz/data/filter/dynamic/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/filter/dynamic/size.py": "7f1f6d65f7f4c723536259da0c3792a2ae8ca4d2bf53e859a67035c581ea4c0a",
+      "src/boltz/data/filter/dynamic/max_residues.py": "b6f61a7e4f02e3efedf7a9d6487209e7bcaac568c7ae5257e4bf0a8e9b8a6c4d",
+      "src/boltz/data/filter/dynamic/date.py": "33d92cd4fcfda7433df7ec69a27aeebfefc51df351dc7bf7a17b7f35134c396a"
+    },
+    "inputs": [
+      {
+        "id": "8F9Q",
+        "yaml_sha256": "1c30ce3ef4664182489b7719ef1fedf86259e33858b0503b788f23128a9e116a"
+      },
+      {
+        "id": "8K11",
+        "yaml_sha256": "4deb1a41a4323a81e88e8fe07076b9544961e3d5bcc55531d45e5904c093191d"
+      },
+      {
+        "id": "8PO5",
+        "yaml_sha256": "c809f2f91cc87d428331cd15250a2c00593bc0e7cc7f0f71c5b30a0c511f4840"
+      },
+      {
+        "id": "8PVS",
+        "yaml_sha256": "de266a6731317efb3c6b88dbd9361150421e3c4044227fea685f17eb46d0aa2f"
+      },
+      {
+        "id": "8Q1V",
+        "yaml_sha256": "a3f94124a3f5362f68ef316d17a86cded16ed375ffad9ecd6b6f0ac9bf453cd4"
+      },
+      {
+        "id": "8QZU",
+        "yaml_sha256": "cd2b18b764e83d8bc0a57c7b4df0707e8307de1a016f9772cc65585faa60acf2"
+      },
+      {
+        "id": "8S89",
+        "yaml_sha256": "c7ec9bb1976a140d0225b256e58d15e92f659763ebc10b087460f351e44f6849"
+      },
+      {
+        "id": "8SP2",
+        "yaml_sha256": "e0d85d8fc4edb895f6716395b65ca2eefc702939ee5677e710dfd984bcf8e26b"
+      },
+      {
+        "id": "8TCS",
+        "yaml_sha256": "9995daf8632ac3f10363254e1c0effcbdbd19ea5a95bdf9b88c19a4ce1030b9f"
+      },
+      {
+        "id": "8TDH",
+        "yaml_sha256": "6cee788c0a113446308df08aa4b2d16b935122ac09072089232bd8224afd3324"
+      },
+      {
+        "id": "8TNC",
+        "yaml_sha256": "e9bd8059cdeebb6874650722418afde73cbe380301940c80cd229c061d2a9745"
+      },
+      {
+        "id": "8UDS",
+        "yaml_sha256": "58ec3c77b43576ea7c38ddbe89c894a548022464e08242043e069374e4dbeda9"
+      },
+      {
+        "id": "8X3E",
+        "yaml_sha256": "c6901e93d0ccf2131d06bd278b4494b440694e43cf664fb7fe781c9f0f46d9d4"
+      },
+      {
+        "id": "8XTE",
+        "yaml_sha256": "bd1c2ef2510d1c169ca28e441cacc2ad13ba0f4a49e4adf76b91824f7abff7e9"
+      },
+      {
+        "id": "8ZJB",
+        "yaml_sha256": "f8b0901e13c1fbdede976ba30a1657db80c9f885de1525c0107deaee90a999c9"
+      },
+      {
+        "id": "8ZVG",
+        "yaml_sha256": "9976cf1b7a066c436bbe52649da7a6a6b34204974329ecfc99366bee501cafac"
+      },
+      {
+        "id": "9ENI",
+        "yaml_sha256": "b02f9f0f22aca31ca67b8e2a21c9651f0b8cf025b13983c6aad193ff3222f5f9"
+      },
+      {
+        "id": "9FOW",
+        "yaml_sha256": "285fb198517a997afd1f25b6133acb53346c8a71fc1512c0fb7ef3e631a5b1a4"
+      },
+      {
+        "id": "9GFZ",
+        "yaml_sha256": "2275cd67d8d710cedb72a7fe69f2ad6dc240aa2aac16fbee1af9806c25a41dc3"
+      },
+      {
+        "id": "9K7M",
+        "yaml_sha256": "5848a9a71ac17b453c1b150b4efee14153fe65a97604496f409f475a1370ed34"
+      },
+      {
+        "id": "8CEG",
+        "yaml_sha256": "de6950f54ea09ba6eed9eca0bed2b855938387e8251489fbd80518ffda91edeb"
+      },
+      {
+        "id": "8EVM",
+        "yaml_sha256": "860d0d75a20d4dd95c4ad4236c80a16c278e0549879ea66e284ea3fb32fd177f"
+      },
+      {
+        "id": "8GMH",
+        "yaml_sha256": "451efcc6a1226f8835bfdc6789d3579ffebe0d9924fb2fbb08052320ca406f41"
+      },
+      {
+        "id": "8HSB",
+        "yaml_sha256": "54bc9a81febbb805d9b34918f10a58d660fd8fba3fd643ab4df91dd44d1052e8"
+      },
+      {
+        "id": "8HW7",
+        "yaml_sha256": "50c70b635356f2729235d3322a5980a09830dd2a7b3573fe93ecd7c784bae05a"
+      },
+      {
+        "id": "8IFU",
+        "yaml_sha256": "0f265897ac4c0e826ee99dbc0517b90d7dd5d529f4de77f305fc2f8e6cf4effb"
+      },
+      {
+        "id": "8IRQ",
+        "yaml_sha256": "dbdf7abbeb9e7d37f1a5c197af046ff96b56b102359ef102176aa5c83ed74285"
+      },
+      {
+        "id": "8IVH",
+        "yaml_sha256": "12d90906fcd23c2c649f30703d5273acce7949bb611702c4d2767659e134532c"
+      },
+      {
+        "id": "8IWD",
+        "yaml_sha256": "bb27ab05a32546781d7c55ada3f37dd08bd7fa65c492ebeec58b764dd894ca9b"
+      },
+      {
+        "id": "8J5H",
+        "yaml_sha256": "76bced78179cceb17e23da840dc582da1d358ad8775e7c1cd59e7c5ef76cc21e"
+      },
+      {
+        "id": "8JBI",
+        "yaml_sha256": "950a22f788a1617047ca077ab6e80f0b912a103e3cd10077ef99995902064111"
+      },
+      {
+        "id": "8JD7",
+        "yaml_sha256": "3c6c38dd64c138f9f1ffd148bca0f8f53d10e2499bc0081351ec316176e65c7f"
+      },
+      {
+        "id": "8JFO",
+        "yaml_sha256": "d33c369453aefb691ddd0f49d1d768f09345eb28e69f807514f86b2ae8414390"
+      },
+      {
+        "id": "8JX4",
+        "yaml_sha256": "36cd32271c759d5a62e1dcdc794a1cff8927f9000c8e5dfac016d92baffb5557"
+      },
+      {
+        "id": "8JZ5",
+        "yaml_sha256": "5a730f85ddd9a5626a12597a181ea4d313f8530c3a7eca85411cdd1106012805"
+      },
+      {
+        "id": "8K2M",
+        "yaml_sha256": "18cec8a9c2e6c8facc90f15fb37e69feded6a0c684b9801ac5aa9682797cd4e1"
+      },
+      {
+        "id": "8K5U",
+        "yaml_sha256": "2c2a04a5b6006c42f44120abb25d0f5cf564ce44a4d3d212f616614dd0ff40ef"
+      },
+      {
+        "id": "8K69",
+        "yaml_sha256": "e7e68407cbb33c16b8e36cd2b89c24f1eeba70339e7e762db3360f5ad2dda199"
+      },
+      {
+        "id": "8K74",
+        "yaml_sha256": "09fbbca34bd12c78512e6c1a857120b0d61464cb8f1e551d786adec7019e9c44"
+      },
+      {
+        "id": "8KA6",
+        "yaml_sha256": "7827560a9b6a35e64876b17515519f7a5dc2b87872d9063aa3d8bfe835ec5d61"
+      },
+      {
+        "id": "8KBM",
+        "yaml_sha256": "da185fa46374e1cf228ac5c4cdb7fbd93ab8c9ccc38c39a5207a23a3bb9cacdf"
+      },
+      {
+        "id": "8KC4",
+        "yaml_sha256": "df0b34c1a21d6b807b7f374ca69401cb3b2ec6b171dae27a1ce9469660ecaa7f"
+      },
+      {
+        "id": "8KGS",
+        "yaml_sha256": "5502006a9ca2c243f60284187369405ceb611ee80b40ffb03db8ebfc50cb833f"
+      },
+      {
+        "id": "8KGW",
+        "yaml_sha256": "9ccd3ec6c6a577bb8172667ea977f9a049225f3f98482f0df67f69ea6cc0f3ed"
+      },
+      {
+        "id": "8ONW",
+        "yaml_sha256": "90943e918a376acf53ec88a29a58f9d5223c3e4c501b3ce400c95272a44a8cd7"
+      },
+      {
+        "id": "8OXR",
+        "yaml_sha256": "e73abff154077d8ed41ce30918e0b8edb40a267925ef3eefb0c62d1aaab741c3"
+      },
+      {
+        "id": "8PAQ",
+        "yaml_sha256": "f3a67f7a524856434706b835eac837b8b42ab165ad9f415002b3d544b9a7b8b5"
+      },
+      {
+        "id": "8PB4",
+        "yaml_sha256": "2a87630e896e50f768b84fe59d5f5cde943fdae8151cd8f2e46654ea1cdd26c1"
+      },
+      {
+        "id": "8PQP",
+        "yaml_sha256": "45dc6c8079279b1d701f9879d20e601b0aee900b289f39ce2494f85b110347eb"
+      },
+      {
+        "id": "8PS7",
+        "yaml_sha256": "16ad35174e714c3c561c7a072450a6e8141c82352f620093f419a29a4d031de8"
+      },
+      {
+        "id": "8PU3",
+        "yaml_sha256": "b6915cc619118a9a8fbe15dec0f0c35775ae4013f391b390701bc18790cc0dac"
+      },
+      {
+        "id": "8PUZ",
+        "yaml_sha256": "e0919e96aa6b6f7977c4858f527e558b89e557f924e3b035b674cc74d20e31af"
+      },
+      {
+        "id": "8PXU",
+        "yaml_sha256": "0712e62c1a960350e98b060863e6a3056fc3529798b3fe9ce557127ec2691731"
+      },
+      {
+        "id": "8Q2A",
+        "yaml_sha256": "34ed464f0a7165a3f7f1373c57e765011bc03100291e119af21872315739ba99"
+      },
+      {
+        "id": "8QJP",
+        "yaml_sha256": "23b7ea708760b7d0f7674473e50f34bf8d5825c9d1cf1df088af8aa1ff89e8b7"
+      },
+      {
+        "id": "8QLE",
+        "yaml_sha256": "a29218f3b5f452d727b6f8bf2b809bb14bb055aac37ffa82acbb57e3e1ae8cba"
+      },
+      {
+        "id": "8QT6",
+        "yaml_sha256": "d5a88221d245b864ac89b1bbb72440307b39f4210d994433712a8488104f6975"
+      },
+      {
+        "id": "8QTR",
+        "yaml_sha256": "ed782ba79fb5fdd7b60e3e2daf8495ba798af833fe04af3aa191c2c306aea9a4"
+      },
+      {
+        "id": "8QX6",
+        "yaml_sha256": "805db65ebee1aa2ac4044dbc0fcaa046910f091540678c336b5453489e6ce375"
+      },
+      {
+        "id": "8R5S",
+        "yaml_sha256": "cfbe3ba4c58fa8013acbcecc6b4026d815aaf74cdba77ac9567b5ffb7ccf3fbc"
+      },
+      {
+        "id": "8RD2",
+        "yaml_sha256": "d41606f845eb3275fb7919e92c04b9ec4d8912453f519d5e6b97acd987c48575"
+      },
+      {
+        "id": "8RK9",
+        "yaml_sha256": "84e9db7d9cc0f70cee677dbfcf91c961136c69c5a2a2494c393effaa241921a5"
+      },
+      {
+        "id": "8RWW",
+        "yaml_sha256": "ec65e447bc902279c037fc477883ea6d1665f32b1b4d86ba3b4f446688efc379"
+      },
+      {
+        "id": "8S86",
+        "yaml_sha256": "f7fba9ab0480653b5615385fd4a18df58fa6287a1ffbc980a3994a85d8e33839"
+      },
+      {
+        "id": "8SM7",
+        "yaml_sha256": "a8035cd059ecc7f5b77a78a9de02582f41aa9ae059a9485ae359621460192cce"
+      },
+      {
+        "id": "8SV7",
+        "yaml_sha256": "bdf8ef3dd91216bc0ac845b59b3552e45bd610cff0011d6a97ec791a7b2fd360"
+      },
+      {
+        "id": "8T2J",
+        "yaml_sha256": "cb9db1dca8f9278756683daf305e04fe3a0f287414dea36a36052f04ef8f835c"
+      },
+      {
+        "id": "8T87",
+        "yaml_sha256": "526ab9b7d19b0708923a4b68f06ee18488d1d319da1cf8a3798f03ece8625e4a"
+      },
+      {
+        "id": "8TDI",
+        "yaml_sha256": "5d3ac04033e1779b901bb77c46da8b893cdddcdcb48e0a59a1a2ac47f567fcf1"
+      },
+      {
+        "id": "8TL8",
+        "yaml_sha256": "c3cf665bac4912ad5f894ba2a63a7a4b694deaaeec3fc9761fb5cf2defb6d0ef"
+      },
+      {
+        "id": "8TQN",
+        "yaml_sha256": "63b903977d1d667bc121e21832aad87eeddb13e52b8920740010989796a46b76"
+      },
+      {
+        "id": "8U0I",
+        "yaml_sha256": "181b5b40e2bb5a05ae07a0947332464a51ee0e26ad0a92850eec47c7da1c926d"
+      },
+      {
+        "id": "8U7B",
+        "yaml_sha256": "4f93470dcb8795ddb3fbea8b528ea501603e94ff0ea66730d85138d00fab2c4d"
+      },
+      {
+        "id": "8UAG",
+        "yaml_sha256": "b6d8303fbcab14b4426bf6b39ba467f4fd3788553ed975f8fab55d0f850b5e4c"
+      },
+      {
+        "id": "8UMC",
+        "yaml_sha256": "1a49972ade0aa11dc206192def25ac6bcecc416e8de80ba29bc24e1ecaa7f7f5"
+      },
+      {
+        "id": "8VR3",
+        "yaml_sha256": "d71ac2448aed78f391f44d0aa296f96135820fb5e35bf435065f35e1477a01fc"
+      },
+      {
+        "id": "8W97",
+        "yaml_sha256": "8e699652b915d259b06f91550cc180aa97995288e894b8cf2c434db6357e5825"
+      },
+      {
+        "id": "8WAC",
+        "yaml_sha256": "24ebdb113ab6f13725672b8caf8bf011d5b86f9cd0fd15912a639cc2afa99f7f"
+      },
+      {
+        "id": "8WAI",
+        "yaml_sha256": "31c0a843f7fe1432cfe456db3f9c9015f41b273a57b5268022c4dfe3b4f3ae6f"
+      },
+      {
+        "id": "8WQ8",
+        "yaml_sha256": "7956593f50d4a6d9f424012f8445e4498580f437c0b7d5f9a3f35b66ece2ac30"
+      },
+      {
+        "id": "8WTH",
+        "yaml_sha256": "fe23779dc1d249535aa7836fdd470e441183e3afdd9e22e00a59b2c008d248f5"
+      },
+      {
+        "id": "8WX1",
+        "yaml_sha256": "b2f89e1b3fb72c0bf334fbff317b4e285be1a57f94a0cebb86228092a8057c98"
+      },
+      {
+        "id": "8WY1",
+        "yaml_sha256": "61e6aaa82e1ee5883eab335624edefadefeb5765ac623346eea911b52fdff822"
+      },
+      {
+        "id": "8X6E",
+        "yaml_sha256": "749ce33fd755c9e0c2e210f87b82efe32d3d3008b507aa73572d43fc544708ae"
+      },
+      {
+        "id": "8X8K",
+        "yaml_sha256": "fd0c12590e6a57bed93cad88de4a28b623c1b9bf6cc8f200e11bba59a1a1f5ec"
+      },
+      {
+        "id": "8XHS",
+        "yaml_sha256": "55c2da79e0ee3a0ad89eba432230adc53f74ee93e2314f3a15a4c477a50a827d"
+      },
+      {
+        "id": "8XLZ",
+        "yaml_sha256": "0a3a860ce245a8be5bd755e08b95c4370ed5290760360829fd0312fe5020b3c1"
+      },
+      {
+        "id": "8XUA",
+        "yaml_sha256": "573237dc660ce94ded892c9a48a72ec1c31315b12829b47fc3d90fe04bcae6c9"
+      },
+      {
+        "id": "8Y9K",
+        "yaml_sha256": "0f691f379af5e7f2217232ca0e804d31964d390bd81a404ec3185091491d7be7"
+      },
+      {
+        "id": "8YA8",
+        "yaml_sha256": "3438541bdf27cb751d21ab1be777105cb300cc16710d2582f0e55e8e56079946"
+      },
+      {
+        "id": "8YCM",
+        "yaml_sha256": "bfd080ae3c17bfc8aaa1755f31be7662eba12e83e59b638da263afa611d48016"
+      },
+      {
+        "id": "8Z1E",
+        "yaml_sha256": "6fdace22200fa0119b7738b331f55917ad319ee9569aae1b4ac625d4000e031b"
+      },
+      {
+        "id": "8Z2M",
+        "yaml_sha256": "66472301acf34a6cf3947ff40f2d787f6a4e4e530f160e45999f14225f1916a4"
+      },
+      {
+        "id": "8Z4S",
+        "yaml_sha256": "2fa73720dc73de84701dc3a02ad782d6331e38b8a7989fde4977ccfec37e7aaa"
+      },
+      {
+        "id": "8ZAD",
+        "yaml_sha256": "183acdeadde96f3d6445506db1c206e168d9e0ad4243c98e5ab7b43ff34d5d84"
+      },
+      {
+        "id": "8ZB5",
+        "yaml_sha256": "045740d98ffb7d0354f7c7de127c41cd61cf45b8ff8466e36543cbc88947be0c"
+      },
+      {
+        "id": "8ZQQ",
+        "yaml_sha256": "f6f1a0771d0286371d1dc71ebce98a02ad83403dbc8562286c04f403eb88dbb7"
+      },
+      {
+        "id": "9AXB",
+        "yaml_sha256": "83152ffbe4a31b0bbc54f8860eb1c49200e148e1e3ae11921f3725af7256c167"
+      },
+      {
+        "id": "9B06",
+        "yaml_sha256": "63009406df33da56721f6efa629cf709f92d64ebcc412d8ff20f55f7dc7bd25a"
+      },
+      {
+        "id": "9B1I",
+        "yaml_sha256": "b3989246122e7a9b457e8dabe60db94333ea66df47d8345a94c95ad8df425353"
+      },
+      {
+        "id": "9B1U",
+        "yaml_sha256": "fbbdd4d7f7c2bc3c35dae65ee9f2c245bec52fe67e7297fe2da6a2fe568d95e2"
+      },
+      {
+        "id": "9B4G",
+        "yaml_sha256": "f3ab0c398d9d5efeb45aa99412b51a33580abf20614b97fe59129a23c985828e"
+      },
+      {
+        "id": "9BCE",
+        "yaml_sha256": "fc7ef2f21fcf749f8b27f7331d7157aff3202502c4764517bbc0c8baf8abaeb6"
+      },
+      {
+        "id": "9CBS",
+        "yaml_sha256": "99fda0d18d9f0109d0d9706db2f90548e8103dfd5de0794fe58d9b718b787c1e"
+      },
+      {
+        "id": "9CP8",
+        "yaml_sha256": "555c28889aed205f2ebe08775a8d2addfd771f881a1376a57d249863fe66c62c"
+      },
+      {
+        "id": "9CX4",
+        "yaml_sha256": "2c2ff5a62cf5011249e2182a2e9ccc6942bdc2d02c0bb52ea5d25b373463991f"
+      },
+      {
+        "id": "9DRZ",
+        "yaml_sha256": "6a2bca328adb86f68d8ddd2c0430b0435ececdb80beda79249850e1911c2933d"
+      },
+      {
+        "id": "9EMU",
+        "yaml_sha256": "5e448e602261ad5da71553ce17f0f9f1aa197d659cef632c1d39d1fbf7bfff69"
+      },
+      {
+        "id": "9ETN",
+        "yaml_sha256": "2c86df65855ee5a2cfa0e92fead724a2483ee812660763bae4518f5d2faba9c3"
+      },
+      {
+        "id": "9EVQ",
+        "yaml_sha256": "0735b5ccc3d12f6903309bd2300021d027290a693b58dc1f1f59ca45e95336d7"
+      },
+      {
+        "id": "9EXZ",
+        "yaml_sha256": "623b910166a2266bb79923e8d4ce7797681c14581e56d517bd05ba1af9f659de"
+      },
+      {
+        "id": "9F2C",
+        "yaml_sha256": "5551bd950c66028e0cc9477b13367d38c3c543b69cf37c0165228061ee52f26d"
+      },
+      {
+        "id": "9FM7",
+        "yaml_sha256": "ecca09c4a9ce7ee798ca3a8eddcfe2687f309b4f02516cf564913688b0f4a710"
+      },
+      {
+        "id": "9FXQ",
+        "yaml_sha256": "85a931066f10e908c3a11434c61656f0cc286b2996cd6b5234bc74e35f764823"
+      },
+      {
+        "id": "9JQF",
+        "yaml_sha256": "e79821080fe7afdbaec0660a6e4c3c5b2925582d76c892a93246d5f15b1770bc"
+      },
+      {
+        "id": "9K1G",
+        "yaml_sha256": "4cc071bafa362a7b5cb9f458df201db9a094fdef82c90b8d4b63a6b2981dcd7b"
+      }
+    ],
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition, 97887 MiB, 595.58.03",
+    "order_note": "The previous 20 targets come first, followed by the remaining 96 sorted by ID. Identical order for all batch sizes.",
+    "timing": "Fresh Python process per batch size. Start before imports; endpoint is the final default-recycled Pairformer output. Cached preprocessed data/MSAs; no MSA search. CUDA synchronized at coarse module boundaries. No warm-up inference."
+  },
+  "receipt": {
+    "status": "complete",
+    "batch_size": 4,
+    "batch_layout": "packed",
+    "torch": "2.14.0+cu130",
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]",
+    "model_path": "/home/ubuntu/grouped-msa-20260923/candidate_v5/src/boltz/main.py",
+    "profile_msa": true,
+    "backend": "triton",
+    "native_triangles": false,
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "source_hashes": {
+      "src/boltz/__init__.py": "17ffaca374b8d2266b499f3d19ee134ba699ab05b2657abf1f801718395b03f8",
+      "src/boltz/main.py": "6929ffeb513bff332aa8f4dffe3f9a30f438d842fb985271bfb8f639a1e60197",
+      "src/boltz/model/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/layers/attentionv2.py": "ae9bbc1eeb56c8dcd403d49693c84cd616ffd6772226364214ffd61d328cd8da",
+      "src/boltz/model/layers/dropout.py": "cb22161a9683a8d9d16866f4fd3d1ece2cce663e2e4ed738bcd3bd23f47a77b6",
+      "src/boltz/model/layers/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/layers/triangular_mult.py": "458319d62723c19a672fa650b11a601feaff8ee195179e37e6a43b34a92b3a94",
+      "src/boltz/model/layers/transition.py": "cc50a51a6aa669455420549de16e29558d7b96f8a7d8da6f69930ab9e738cf37",
+      "src/boltz/model/layers/pairformer.py": "2865087e5b66e9cebeb7a916b53363f3bdc5aa7e7b465dc07c6b0247ac294348",
+      "src/boltz/model/layers/outer_product_mean.py": "b984924b713ba3b534c99071553332156de61a78f35dc48b6cb22af1debdac9d",
+      "src/boltz/model/layers/attention.py": "ae47793d3228541d644b30e706b65fbade03a041ca1c10b0b836f5a7425f49c9",
+      "src/boltz/model/layers/relative.py": "7cb3b00031b95430dd1f61aa8acf8be8bc3c867586c423e37d5eadf2461e1087",
+      "src/boltz/model/layers/pair_averaging.py": "5c72b5ee6eb591cf65a37a4ce1962128be552aec2268b3c86b3b45ba18b1a48b",
+      "src/boltz/model/layers/initialize.py": "2a72bdb547c6bc25a47706dc2ef258a0bf969a5a3d61c21c281b5dad76941b7d",
+      "src/boltz/model/layers/confidence_utils.py": "50cc0fe50e6088127c04ae715875e612c0f8a690ee8114b86a5ad41aebc63db7",
+      "src/boltz/model/layers/triangular_attention/primitives.py": "d7245ffe8eefa580c693967e047da9950ed2b366c3595804e19a4477d789a412",
+      "src/boltz/model/layers/triangular_attention/utils.py": "1236df24edde965ec06fcbfc006ef3b16f0a9359fa6e519f0b21cf47e34ecdb5",
+      "src/boltz/model/layers/triangular_attention/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/layers/triangular_attention/attention.py": "deaaa0c28d2864d630d83c586d3d6b3f3499909cad01579753ce1c35a9c465c7",
+      "src/boltz/model/modules/confidencev2.py": "3132daafb4f1d964be1a3531607a904cc36d5d13c542a9ece302295ff26f8f1c",
+      "src/boltz/model/modules/diffusion_conditioning.py": "6500f3bd894c27d072581810be5548250eba18f1e400af637d554aebc20ce719",
+      "src/boltz/model/modules/diffusion.py": "1db22472de8e7cd9ea135cce44300736a20ce94a2a0c3f77b5a8e12b1f7852d6",
+      "src/boltz/model/modules/utils.py": "c4645df77c0cd6bfa957a8d1d8549be6a9effd3a760774d05ba84d3466a151e1",
+      "src/boltz/model/modules/packed_triangle_kernels.py": "9a75c7f63afa1a6552ab17c1bac958ddae07c2177830211c5665c33b51e11d22",
+      "src/boltz/model/modules/diffusionv2.py": "46d9ea4f3ea901ec20658f02b3f65880ef9c9984d1b92fe682e392b79c779821",
+      "src/boltz/model/modules/encoders.py": "cd7410792cd48dfdf28294bf7ab017584a7193cfbad94f0259c0bf5d357db276",
+      "src/boltz/model/modules/affinity.py": "164b48db0ae40eab2318724ebafcd5ad92bbf0c38f8d4eb940dd25eac07540f4",
+      "src/boltz/model/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/modules/transformersv2.py": "a030ae7a12c3a29fb8f5aca77cd749dfac531489ceebf1a0ee1eee3529e3c50d",
+      "src/boltz/model/modules/grouped_msa_kernels.py": "9458079877769b44838fa4ae140f880aaf5cad757e7b4c7c77c9cc0a0e6d51e5",
+      "src/boltz/model/modules/trunkv2.py": "985b949b96475ad24e86cfe3f4791a74de864541336e6dd7bfe8fea39420569f",
+      "src/boltz/model/modules/packed_msa.py": "0aef205d6a6846bbf88b800829801e801b32a1ac77919470221b79a37e44de62",
+      "src/boltz/model/modules/packed_kernels.py": "e4c13082cc5438deed9c5b1dcbc320bed82a0321397983c004875e03c76214b0",
+      "src/boltz/model/modules/packed_triangles.py": "e92fd9a1eeb35de56e5206ff8ed964bc2ad7ca238e18cef3bebe08517180b345",
+      "src/boltz/model/modules/grouped_msa.py": "8f333b0af07c72b4bcf48e64ba466820378e06a3b1c3b58be6212db37b843820",
+      "src/boltz/model/modules/packed.py": "a38d4af7efa2ab894e7adfbc103622f44e1a0a947bfd1f99f2a1383cefc42d99",
+      "src/boltz/model/modules/trunk.py": "44b4e5b73714d1032cd8ae680abcd5715e38b7dd06991f9b3e1692ae5f4e898d",
+      "src/boltz/model/modules/transformers.py": "2e427fb4940106053a99f4eba9de9966eda3abb1755a93736207a6577fb5b74f",
+      "src/boltz/model/modules/confidence.py": "af156ef9ac4eb991506b6950b6e1f87e9d466e97c11c295f22a856eaf4d71c5d",
+      "src/boltz/model/modules/encodersv2.py": "2938af17252607d056106fc04a3afa0ea96b145fa7485764ebf33d646c99e0d4",
+      "src/boltz/model/modules/confidence_utils.py": "2b71b1e9b675544d8cfc435b27df2e2adb719319ea44f94fffb806a05359c88c",
+      "src/boltz/model/optim/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/optim/scheduler.py": "9c1e23cf4099e294789f4f0b427804c4bfe937270875823c0175681cf9d9590f",
+      "src/boltz/model/optim/ema.py": "ae3d5df44e53589d84516eb3fca86b80e1007bf8f3077763ecee65c099e9acc7",
+      "src/boltz/model/loss/confidencev2.py": "3c58b678c5c78735ed3f5d78e74e3fe4ccf0bfc6a46f75e6e1961e1ef07b5a24",
+      "src/boltz/model/loss/diffusion.py": "e71b74b36a09a4f31241de704fc31fe4bcca821a0abbef035cf3872f77b81076",
+      "src/boltz/model/loss/validation.py": "818a5b6a0f66ba58391c93d78ce50568c57d5d2617fecd9b210d22623880a30d",
+      "src/boltz/model/loss/diffusionv2.py": "c7eca07579fde88efb6c232ccd7b3964721cb91c70f17df1583de5f43cbe503b",
+      "src/boltz/model/loss/bfactor.py": "cd7f4922518011347734c71ba6d0118f34ab870586feb5ab1bca47ac75ab13ff",
+      "src/boltz/model/loss/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/loss/distogramv2.py": "74580c1b0a5d2cae3eb241c9c2fa44446d7429f1776543754fdfe1523fa25900",
+      "src/boltz/model/loss/distogram.py": "79006491376335f9e46b480c34570c797fe8ecacec4d8e134d97e6fa80db5ee0",
+      "src/boltz/model/loss/confidence.py": "ca018acad7e8a7ccf05e58dd9625623f45c62816e70a03dc076e5fbf53d47808",
+      "src/boltz/model/models/boltz1.py": "c3d605c51f27ae21ff6712b33c41a0667ebe03017aca25875789926619f3620a",
+      "src/boltz/model/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/models/boltz2.py": "725dbf108ac6008f285ff0cef08b1f5d752e9f728a986c4c6ff97c1eac927078",
+      "src/boltz/model/potentials/schedules.py": "3c4fe0ca97a122e8d3148dc7e5401b2ac1b112f3806a2e98351d719086e9534f",
+      "src/boltz/model/potentials/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/model/potentials/potentials.py": "151d046379920e881db73d2eca4f0f3e01edc4c7a4cafb6cf8af4b262a40d580",
+      "src/boltz/data/const.py": "d4cfbcf19e8791f298e8c90db6a723ddbf4ffa85fdc445e5ba1dea33fbbc74d5",
+      "src/boltz/data/mol.py": "99a3a93c71065f55555c220563aa5034617b8140593c07e04afb8f7f640ed727",
+      "src/boltz/data/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/types.py": "e7e5ede40e0c208bcb966acd04caebb3b017e8a50b85b1aa3cae4cdf83b71707",
+      "src/boltz/data/pad.py": "3b808638e7394f016eb9678fee12a330822c96375f2e3f9526d5d07955c5c7cb",
+      "src/boltz/data/feature/featurizer.py": "fb0a7ecbbb42d5e02ef85d26e399a4bbb807773bcb5fbb3149a50923f697f860",
+      "src/boltz/data/feature/symmetry.py": "244ab11b85dc72ceeae14288c4b3d42d7b2fe70622344dc164c0c7d26b0168d0",
+      "src/boltz/data/feature/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/feature/featurizerv2.py": "c4243c6cc56936776cf4fea42abd06bdcd4fc0538429de0fa6e8e7a9be243759",
+      "src/boltz/data/parse/csv.py": "1dcabcac95b69e37336a112bf237ddfe8fb3c4b68d4a0277608a02f6cac8aa9c",
+      "src/boltz/data/parse/fasta.py": "63828f22d66a859dcc7a3ecfa3799dcdf6c44f2a472fef494f8d34962b4654f4",
+      "src/boltz/data/parse/schema.py": "c0dae4c89c4c4a22175a433b5a0c68860329d2a292c76224328bdde19b73b743",
+      "src/boltz/data/parse/a3m.py": "2399c3d7a918556d4d3ca78b10c9bb2381a7110aed664f5b16dc70f3dc262a2d",
+      "src/boltz/data/parse/mmcif.py": "db99045c2931f8eb9a6b002cedc773d1fc5d46ee7f0823b4015d34bbce0fae34",
+      "src/boltz/data/parse/pdb.py": "7aa50724cd70fdbd8a4acaeba8ceca0bd76ba9cc95099592a1ddcd1e53081a69",
+      "src/boltz/data/parse/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/parse/yaml.py": "19115132d0c3e0f4383c8a40fd2d638f4bd1684bb62e565dfe0e2b375cd4acda",
+      "src/boltz/data/parse/mmcif_with_constraints.py": "5876197244aa530bbe35bf6f9959b11e60bbbb1c15ac5ec05547952ac739c064",
+      "src/boltz/data/msa/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/msa/mmseqs2.py": "7537c23ca2d6863639187b8815011d592ee433bb145e6fdc86082ca836d3a6e7",
+      "src/boltz/data/write/utils.py": "d8fcef78ce2a67b01a76bbb5433a22d83862b7fb382d7973e1c797a46262e32d",
+      "src/boltz/data/write/mmcif.py": "ebf4c5773903bb4f5dbe8121ece2def65855c7f5947157586cca74d26ec3337c",
+      "src/boltz/data/write/writer.py": "448634966bdfaafdff8930b1590dcb79d1b5cae408d0eb7bdc11790aea19fa78",
+      "src/boltz/data/write/pdb.py": "a7ec3450deaec04fe4c030a99e778df5ed23a6f483b286d10fed00fa22aa6db9",
+      "src/boltz/data/write/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/sample/sampler.py": "2d757814b40f74c0bf8dae0c8cf8f4922704aebf145d25ab29e84f045e733b14",
+      "src/boltz/data/sample/cluster.py": "f52c7ca8fef3199380c84b29c1816d0936c64c1667b8dfb37c22856db03fea82",
+      "src/boltz/data/sample/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/sample/distillation.py": "001cecb76141aff139e0aa995881dcd5b62d298afbf65c5124cecf9d2e227cad",
+      "src/boltz/data/sample/random.py": "8e67a79c335f92eab6501ca7e79c2b413c0d3c2381baeebf8c1253e15ada2f6f",
+      "src/boltz/data/filter/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/filter/static/filter.py": "2bb4ae77861327b8bd44d2bb68f6ccd2e22e3bfd577cbae466b3ca823563eb22",
+      "src/boltz/data/filter/static/polymer.py": "2cdb1032c38e9e162978ab8cf404ad92da1340f3191371f4caee26460fa3c0f7",
+      "src/boltz/data/filter/static/ligand.py": "2da982f99f488d88f70e67f1c0c1663db28106144c6f2dee5908fbe300d65497",
+      "src/boltz/data/filter/static/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/filter/dynamic/subset.py": "c49fcb51e2d635af432046f1a07e3c2e9fc6d17374acb17d7a9e97c9f0ecfaa7",
+      "src/boltz/data/filter/dynamic/resolution.py": "38b84f8f462e992f2de39c7440a2c173a1116f04aa6c539907ca6e11dd7b51f6",
+      "src/boltz/data/filter/dynamic/filter.py": "ae7ca9f3e84258c1df3954ca6c3a3ed000efc35ce8bc6c23fd8f8fb8ffe9c625",
+      "src/boltz/data/filter/dynamic/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/filter/dynamic/size.py": "7f1f6d65f7f4c723536259da0c3792a2ae8ca4d2bf53e859a67035c581ea4c0a",
+      "src/boltz/data/filter/dynamic/max_residues.py": "b6f61a7e4f02e3efedf7a9d6487209e7bcaac568c7ae5257e4bf0a8e9b8a6c4d",
+      "src/boltz/data/filter/dynamic/date.py": "33d92cd4fcfda7433df7ec69a27aeebfefc51df351dc7bf7a17b7f35134c396a",
+      "src/boltz/data/tokenize/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/tokenize/tokenizer.py": "f689243bcf40d51bd0779b5c5bd54b20a6424afbd400ba2ccb68ad74dd660c81",
+      "src/boltz/data/tokenize/boltz2.py": "e35aeb4b1c63df7abc402cf71ac3261447fd2374e557ab1aebd57ce4ff054422",
+      "src/boltz/data/tokenize/boltz.py": "53c62f3952d95f8d523a258375b0d23431336f0c19db218207ef0c4381f68cd3",
+      "src/boltz/data/crop/affinity.py": "36a1adbc8f3788eb561839805704e95f2233c5e4920070dab860ab9b1aafb18b",
+      "src/boltz/data/crop/cropper.py": "0460e017035550fc8166f72a9c9c0fc87fc87d9d4d018099fca3306d07f81cae",
+      "src/boltz/data/crop/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/crop/boltz.py": "6e5a0ff6f93a726288678cd9a0ed3821785ba2e488105bca6f1054a0b1034071",
+      "src/boltz/data/module/inferencev2.py": "5a63b752b8d862dd5050d7e8f81ed5e45371e5e8b7ead573bfdfe02cb0b597df",
+      "src/boltz/data/module/trainingv2.py": "66c6141d85f17ee3e02296d3c028f940b3b45cafffc63b2a230e8601148d196d",
+      "src/boltz/data/module/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "src/boltz/data/module/inference.py": "3f19e1cc43cb6f2815b8f088ad3b4cdd18903b42c56e4daaa7576c332d6881f7",
+      "src/boltz/data/module/training.py": "9a4e3f1487e1056b97ecc2ee50b584a059c6dd8949040a02ab81a20f3c868030"
+    },
+    "predict_args": {
+      "recycling_steps": 3,
+      "sampling_steps": 200,
+      "diffusion_samples": 1,
+      "max_parallel_samples": 5,
+      "write_confidence_summary": true,
+      "write_full_pae": false,
+      "write_full_pde": false
+    },
+    "diffusion_process_args": {
+      "solver": "euler",
+      "gamma_0": 0.8,
+      "gamma_min": 1.0,
+      "noise_scale": 1.003,
+      "rho": 7,
+      "step_scale": 1.5,
+      "sigma_min": 0.0001,
+      "sigma_max": 160.0,
+      "sigma_data": 16.0,
+      "P_mean": -1.2,
+      "P_std": 1.5,
+      "coordinate_augmentation": true,
+      "alignment_reverse_diff": true,
+      "synchronize_sigmas": true
+    },
+    "msa_args": {
+      "msa_s": 64,
+      "msa_blocks": 4,
+      "msa_dropout": 0.0,
+      "z_dropout": 0.0,
+      "use_paired_feature": true,
+      "pairwise_head_width": 32,
+      "pairwise_num_heads": 4,
+      "activation_checkpointing": false,
+      "offload_to_cpu": false,
+      "subsample_msa": false,
+      "num_subsampled_msa": 1024
+    },
+    "pairformer_args": {
+      "num_blocks": 64,
+      "num_heads": 16,
+      "dropout": 0.0,
+      "activation_checkpointing": false,
+      "offload_to_cpu": false,
+      "v2": true
+    },
+    "steering_args": {
+      "fk_steering": false,
+      "num_particles": 3,
+      "fk_lambda": 4.0,
+      "fk_resampling_interval": 3,
+      "physical_guidance_update": false,
+      "contact_guidance_update": true,
+      "num_gd_steps": 20
+    },
+    "use_kernels": true,
+    "targets_completed": 4,
+    "batches_completed": 1,
+    "pairformer_passes_per_batch": 4,
+    "forbidden_calls": {
+      "distogram_module": 0,
+      "diffusion_conditioning": 0,
+      "confidence_module": 0,
+      "bfactor_module": 0,
+      "diffusion_sample": 0,
+      "diffusion_forward": 0,
+      "denoiser": 0
+    },
+    "source_unchanged": true
+  },
+  "global_seconds": {
+    "imports": 2.1083709080003246,
+    "imports_and_instrumentation": 2.250579194000238,
+    "cached_input_checking": 0.003636008999819751,
+    "checkpoint_loading": 10.054786769000202,
+    "trainer_predict_called_at": 12.338004657000056,
+    "startup_before_first_forward": 18.635254588000407,
+    "trainer_setup_and_first_batch": 6.297249931000351,
+    "total_process": 44.37262539400035,
+    "process_start_to_all_pairformer_outputs": 43.47998921600038,
+    "mean_startup_amortized_seconds_per_input": 10.869997304000094
+  },
+  "rows": [
+    {
+      "index": 0,
+      "ids": [
+        "8F9Q",
+        "8K11",
+        "8PO5",
+        "8PVS"
+      ],
+      "tokens": [
+        744,
+        812,
+        286,
+        761
+      ],
+      "atoms": [
+        4236,
+        4780,
+        2234,
+        5713
+      ],
+      "seconds": {
+        "input_embedding": 0.23034839699994336,
+        "template": 0.8407336929999474,
+        "msa": 4.678219062000608,
+        "pairformer": 18.932910862000426,
+        "forward_to_pairformer": 24.844724708000285,
+        "output_validation": 0.005358999999771186
+      },
+      "calls": {
+        "input_embedding": 1,
+        "template": 4,
+        "msa": 4,
+        "pairformer": 4
+      },
+      "input_msa_kind": "list",
+      "process_start_to_batch_start_seconds": 18.635254588000407,
+      "process_start_to_output_seconds": 43.47998921600038,
+      "output": {
+        "s_shape": [
+          4,
+          812,
+          384
+        ],
+        "z_shape": [
+          4,
+          812,
+          812,
+          128
+        ],
+        "s_dtype": "torch.float32",
+        "z_dtype": "torch.float32",
+        "finite": true
+      },
+      "msa_operation_profile": [
+        {
+          "operation": "pair_weighted_averaging",
+          "input_shape": [
+            12515612,
+            64
+          ],
+          "calls": 16,
+          "cuda_event_ms": 1149.9485244750977,
+          "cpu_dispatch_seconds": 0.31509216599988576,
+          "dispatch_kind": "grouped",
+          "packed_shapes": [
+            [
+              8192,
+              744
+            ],
+            [
+              1322,
+              812
+            ],
+            [
+              518,
+              286
+            ],
+            [
+              6832,
+              761
+            ]
+          ]
+        },
+        {
+          "operation": "outer_product_mean",
+          "input_shape": [
+            12515612,
+            64
+          ],
+          "calls": 16,
+          "cuda_event_ms": 1079.1339111328125,
+          "cpu_dispatch_seconds": 0.503277008999703,
+          "dispatch_kind": "grouped",
+          "packed_shapes": [
+            [
+              8192,
+              744
+            ],
+            [
+              1322,
+              812
+            ],
+            [
+              518,
+              286
+            ],
+            [
+              6832,
+              761
+            ]
+          ]
+        }
+      ],
+      "allocator_retries": 0,
+      "peak_memory_gib": 34.77711868286133,
+      "forbidden_calls": {
+        "distogram_module": 0,
+        "diffusion_conditioning": 0,
+        "confidence_module": 0,
+        "bfactor_module": 0,
+        "diffusion_sample": 0,
+        "diffusion_forward": 0,
+        "denoiser": 0
+      }
+    }
+  ],
+  "elapsed_seconds": 44.37516587900018
+}

@@ -1,6 +1,11 @@
-# Profiling the remaining packed MSA loops
+# Packed MSA profiling at `7d8233a`
 
-Pair-weighted averaging and outer-product mean still dispatch per record. To
+This report describes the earlier changes at `7d8233a`. The subsequent
+[grouped MSA implementation](grouped_msa.md) replaces the hot per-record dispatch.
+The timings and exact-equality claims below apply only to this earlier version.
+Use that commit when reproducing the historical instrumentation below.
+
+At `7d8233a`, pair-weighted averaging and outer-product mean still dispatch per record. To
 measure their contribution with the full checkpoint and real cached MSA depths:
 
 ```sh

@@ -34,7 +34,8 @@ The `feature/packed-triangle-kernels` branch is the optimized packed version.
 It fixes the per-record triangle dispatch bottleneck by running heterogeneous
 records through grouped Triton triangle multiplication and attention kernels.
 It also fixes contraction rounding to match the reference BF16 precision boundary.
-Other per-record operations remain; this is a performance fix, with the known
+The backend now also groups the expensive MSA operations described below. Input
+preparation and some other operations remain per record, with the known
 confidence-ranking limitation documented in the [full report](docs/full_structure116.md).
 
 Enable the optimized backend explicitly after installing this branch:
@@ -47,14 +48,30 @@ boltz predict inputs --batch_layout packed --batch_size 4 \
 The backend requires CUDA, supports inference only, and remains opt-in; the
 sequential backend is still the default. See [implementation and CUDA tests](docs/packed_triangles.md).
 
-### Packed MSA follow-up
+### Grouped packed MSA
 
-The packed Triton backend also avoids repeated MSA input conversions and large
+The optimized backend groups pair-weighted averaging and outer-product mean
+across packed examples. Their hot path no longer dispatches Python work per
+example, attention head or OPM feature chunk. Workspace waves bound temporary
+storage. All **142 CUDA tests passed**, covering FP32 and BF16/FP16 autocast,
+record isolation, and large-buffer indexing. Outputs are not bitwise identical.
+
+On all 116 full predictions at default settings (three recycles, one sample),
+job time fell **1,258.65 → 1,215.02 seconds: 3.47% less time** compared with
+`7d8233a`. Peak tensor allocation fell **77.87 → 72.02 GiB**. Mean protein lDDT
+changed **0.850164 → 0.849897**, and mean DockQ **0.590696 → 0.588500**. Some
+individual losses are larger: −0.050 lDDT on 8WQ8 and −0.101 DockQ on 9BCE.
+This one-seed comparison does not establish accuracy equivalence. See the
+[grouped MSA measurements, per-target results and limitations](docs/grouped_msa.md).
+
+### Earlier MSA conversion/mask optimization (`7d8233a`)
+
+At `7d8233a`, the packed Triton backend avoided repeated MSA input conversions and large
 outer-product mask temporaries. Against the previous packed version (`e331765`),
 the 116-target trunk benchmark fell from **742.99 to 727.42 seconds** including
 process overhead (**2.10% less time**); MSA module time decreased **9.28%**.
 All 62 CUDA tests and 58 sampled representation comparisons matched exactly.
-The per-input MSA loops remain. See the [MSA profiling and validation report](docs/packed_msa_profiling.md).
+The per-input MSA loops still remained at that commit. See the [historical MSA profiling and validation report](docs/packed_msa_profiling.md).
 This is a trunk-only comparison; the full-prediction results below predate these changes.
 
 ### Structure116 full-prediction baseline (`e331765`)

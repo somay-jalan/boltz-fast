@@ -1,0 +1,7 @@
+{
+  "cuda_tests_passed": 142,
+  "new_grouped_msa_tests": 21,
+  "existing_msa_tests": 62,
+  "triangle_tests": 59,
+  "exact_equality": false
+}

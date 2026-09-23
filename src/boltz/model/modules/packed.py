@@ -317,17 +317,32 @@ def msa_module(module, z, emb, feats, use_kernels):
     m = m + torch.cat(broadcasts)
     z = layout.pack(z, True)
     pair_mask = layout.pack(feats["token_pad_mask"][:, :, None].float() * feats["token_pad_mask"][:, None, :].float(), True)
+    grouped = getattr(module, "packed_pair_backend", "sequential") == "triton"
+    if grouped:
+        from boltz.model.modules.grouped_msa import (
+            MSAPlan, pair_weighted_averaging, outer_product_mean,
+        )
+        plan_key = ("msa", tuple(shapes))
+        if plan_key not in layout.kernel_tasks:
+            layout.kernel_tasks[plan_key] = MSAPlan(shapes, m.device)
+        plan = layout.kernel_tasks[plan_key]
+        msa_mask = torch.cat([mask.flatten() for mask in mask_parts])
     for layer in module.layers:
-        updates = []
-        for mi, zi, mask_i, (rows, n) in zip(m.split(sizes), layout.parts(z, True), layout.parts(pair_mask, True), shapes):
-            update = layer.pair_weighted_averaging(mi.reshape(1, rows, n, -1), zi, mask_i, n > const.chunk_size_threshold)
-            updates.append(update.reshape(rows * n, -1))
-        m = m + torch.cat(updates)
-        m = m + layer.msa_transition(m)
-        updates = []
-        for mi, mask_i, (rows, n) in zip(m.split(sizes), mask_parts, shapes):
-            update = layer.outer_product_mean(mi.reshape(1, rows, n, -1), mask_i, 4 if n > const.chunk_size_threshold else None)
-            updates.append(update.reshape(n * n, -1))
-        z = z + torch.cat(updates)
+        if grouped:
+            m = m + pair_weighted_averaging(layer.pair_weighted_averaging, m, z, pair_mask, plan)
+            m = m + layer.msa_transition(m)
+            z = z + outer_product_mean(layer.outer_product_mean, m, msa_mask, plan)
+        else:
+            updates = []
+            for mi, zi, mask_i, (rows, n) in zip(m.split(sizes), layout.parts(z, True), layout.parts(pair_mask, True), shapes):
+                update = layer.pair_weighted_averaging(mi.reshape(1, rows, n, -1), zi, mask_i, n > const.chunk_size_threshold)
+                updates.append(update.reshape(rows * n, -1))
+            m = m + torch.cat(updates)
+            m = m + layer.msa_transition(m)
+            updates = []
+            for mi, mask_i, (rows, n) in zip(m.split(sizes), mask_parts, shapes):
+                update = layer.outer_product_mean(mi.reshape(1, rows, n, -1), mask_i, 4 if n > const.chunk_size_threshold else None)
+                updates.append(update.reshape(n * n, -1))
+            z = z + torch.cat(updates)
         z = pair_layer(layer.pairformer_layer, z, pair_mask, layout, use_kernels)
     return layout.unpack(z, True)
