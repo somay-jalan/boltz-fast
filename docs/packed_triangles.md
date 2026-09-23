@@ -53,8 +53,9 @@ the Triton pair backend explicitly replaces those triangle operations.
 - Existing dense tensors at stack compatibility boundaries still exist. This
   change does not make the complete Boltz pipeline allocation-free or remove
   its boundary padding.
-- MSA pair layers use the new backend too; MSA pair-weighted averaging and
-  outer-product-mean still use their existing per-record implementations.
+- MSA pair layers use the new backend too. Pair-weighted averaging and
+  outer-product mean still execute per record; subsequent [MSA optimizations](packed_msa_profiling.md)
+  reuse projection casts and replace large mask-count temporaries with a tiled kernel.
 
 ## Validation and measurement
 

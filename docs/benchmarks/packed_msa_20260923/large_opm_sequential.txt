@@ -1,0 +1,31 @@
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------
+                                                   Name    Self CPU %      Self CPU   CPU total %     CPU total  CPU time avg     Self CUDA   Self CUDA %    CUDA total  CUDA time avg    # of Calls
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------
+                                              aten::bmm         0.08%     159.435us         0.09%     179.655us      22.457us      88.733ms        43.50%      88.733ms      11.092ms             8
+nvjet_sm120_tst_mma_256x128x64_2_64x64x64_tmaAB_alig...         0.00%       0.000us         0.00%       0.000us       0.000us      88.733ms        43.50%      88.733ms      11.092ms             8
+                                              aten::mul         0.35%     710.454us         0.63%       1.280ms       5.001us      33.826ms        16.58%      33.826ms     132.131us           256
+void at::native::elementwise_kernel<128, 4, at::nati...         0.00%       0.000us         0.00%       0.000us       0.000us      33.826ms        16.58%      33.826ms     132.131us           256
+                                            aten::copy_         0.07%     144.990us         0.58%       1.170ms      30.785us      31.385ms        15.39%      31.385ms     825.911us            38
+                                aten::native_layer_norm         0.01%      20.000us         0.02%      39.049us      39.049us      18.695ms         9.17%      18.695ms      18.695ms             1
+void at::native::(anonymous namespace)::vectorized_l...         0.00%       0.000us         0.00%       0.000us       0.000us      18.695ms         9.17%      18.695ms      18.695ms             1
+void at::native::vectorized_elementwise_kernel<4, at...         0.00%       0.000us         0.00%       0.000us       0.000us      13.596ms         6.67%      13.596ms     715.601us            19
+void at::native::elementwise_kernel<128, 4, at::nati...         0.00%       0.000us         0.00%       0.000us       0.000us      13.115ms         6.43%      13.115ms     819.700us            16
+                                              aten::sum         0.53%       1.075ms         0.83%       1.683ms       6.624us      12.268ms         6.01%      12.268ms      48.299us           254
+void at::native::reduce_kernel<128, 4, at::native::R...         0.00%       0.000us         0.00%       0.000us       0.000us      12.268ms         6.01%      12.268ms      48.299us           254
+                                               aten::mm         0.13%     262.958us         0.18%     370.137us      37.014us       7.575ms         3.71%       7.575ms     757.466us            10
+                                              aten::div         0.02%      36.610us         0.03%      60.270us       7.534us       5.186ms         2.54%       5.186ms     648.215us             8
+void at::native::elementwise_kernel<128, 4, at::nati...         0.00%       0.000us         0.00%       0.000us       0.000us       5.186ms         2.54%       5.186ms     648.215us             8
+                                              aten::add         0.01%      29.760us         0.03%      51.240us       6.405us       4.669ms         2.29%       4.669ms     583.652us             8
+void at::native::unrolled_elementwise_kernel<at::nat...         0.00%       0.000us         0.00%       0.000us       0.000us       4.648ms         2.28%       4.648ms       1.162ms             4
+nvjet_sm120_tst_mma_32x256x64_2_32x64x64_tmaAB_align...         0.00%       0.000us         0.00%       0.000us       0.000us       4.412ms         2.16%       4.412ms     137.877us            32
+void at::native::vectorized_elementwise_kernel<4, at...         0.00%       0.000us         0.00%       0.000us       0.000us       4.037ms         1.98%       4.037ms     576.727us             7
+nvjet_sm120_tst_mma_128x256x64_2_64x64x64_tmaAB_alig...         0.00%       0.000us         0.00%       0.000us       0.000us       2.768ms         1.36%       2.768ms     346.045us             8
+                                             aten::add_         0.19%     387.007us         0.46%     937.540us       3.706us       1.639ms         0.80%       1.639ms       6.477us           253
+void at::native::vectorized_elementwise_kernel<4, at...         0.00%       0.000us         0.00%       0.000us       0.000us       1.639ms         0.80%       1.639ms       6.477us           253
+void at::native::elementwise_kernel<128, 4, at::nati...         0.00%       0.000us         0.00%       0.000us       0.000us     632.123us         0.31%     632.123us     632.123us             1
+void cutlass::Kernel2<cutlass_80_tensorop_bf16_s1681...         0.00%       0.000us         0.00%       0.000us       0.000us     394.238us         0.19%     394.238us      39.424us            10
+void at::native::elementwise_kernel<128, 4, at::nati...         0.00%       0.000us         0.00%       0.000us       0.000us      25.376us         0.01%      25.376us       3.172us             8
+                                            aten::clamp         0.01%      11.720us         0.01%      16.090us      16.090us       2.496us         0.00%       2.496us       2.496us             1
+-------------------------------------------------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------
+Self CPU time total: 203.054ms
+Self CUDA time total: 203.977ms

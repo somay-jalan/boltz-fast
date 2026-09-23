@@ -56,17 +56,21 @@ class OuterProductMean(nn.Module):
         # Compute outer product mean
         if chunk_size is not None and not self.training:
             # Compute pairwise mask
-            for i in range(0, mask.shape[1], 64):
-                if i == 0:
-                    num_mask = (
-                        mask[:, i : i + 64, None, :] * mask[:, i : i + 64, :, None]
-                    ).sum(1)
-                else:
-                    num_mask += (
-                        mask[:, i : i + 64, None, :] * mask[:, i : i + 64, :, None]
-                    ).sum(1)
-            num_mask = num_mask.clamp(min=1)
-
+            if (getattr(self, "packed_pair_backend", "sequential") == "triton"
+                    and mask.is_cuda and not torch.is_grad_enabled()):
+                from boltz.model.modules.packed_msa import binary_mask_counts
+                num_mask = binary_mask_counts(mask, m.dtype, chunked=True)
+            else:
+                for i in range(0, mask.shape[1], 64):
+                    if i == 0:
+                        num_mask = (
+                            mask[:, i : i + 64, None, :] * mask[:, i : i + 64, :, None]
+                        ).sum(1)
+                    else:
+                        num_mask += (
+                            mask[:, i : i + 64, None, :] * mask[:, i : i + 64, :, None]
+                        ).sum(1)
+                num_mask = num_mask.clamp(min=1)
             # Compute squentially in chunks
             for i in range(0, self.c_hidden, chunk_size):
                 a_chunk = a[:, :, :, i : i + chunk_size]
@@ -87,8 +91,13 @@ class OuterProductMean(nn.Module):
             z_out = z_out + self.proj_o.bias  # add bias
             return z_out
         else:
-            mask = mask[:, :, None, :] * mask[:, :, :, None]
-            num_mask = mask.sum(1).clamp(min=1)
+            if (getattr(self, "packed_pair_backend", "sequential") == "triton"
+                    and mask.is_cuda and not self.training and not torch.is_grad_enabled()):
+                from boltz.model.modules.packed_msa import binary_mask_counts
+                num_mask = binary_mask_counts(mask, m.dtype, chunked=False)
+            else:
+                mask = mask[:, :, None, :] * mask[:, :, :, None]
+                num_mask = mask.sum(1).clamp(min=1)
             z = torch.einsum("bsic,bsjd->bijcd", a.float(), b.float())
             z = z.reshape(*z.shape[:3], -1)
             z = z / num_mask

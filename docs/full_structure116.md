@@ -18,7 +18,10 @@ three recycles and one sample. Structure kernels are enabled. The new arm uses
 
 The original B1 source is pristine upstream
 `b1ebfc46ecf57f5414e0d1a6f9027bbb122c53bc`. The candidate is based on
-`1e3f292306a542dd8dd68a0c350d95386a8ebcbd` plus the grouped triangle changes.
+`1e3f292306a542dd8dd68a0c350d95386a8ebcbd` plus the grouped triangle changes,
+published as [`e331765`](https://github.com/somay-jalan/boltz-fast/commit/e3317655b64041b6f866585ca3c03c620a40f384).
+These full-prediction measurements predate the subsequent MSA optimizations;
+check out that commit to reproduce this exact source version.
 The comparison measures the complete packed implementation against pristine
 upstream; it does not isolate the incremental triangle-kernel contribution.
 The separate [Pairformer experiment](packed_triangles.md) compares triangle

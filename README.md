@@ -47,10 +47,20 @@ boltz predict inputs --batch_layout packed --batch_size 4 \
 The backend requires CUDA, supports inference only, and remains opt-in; the
 sequential backend is still the default. See [implementation and CUDA tests](docs/packed_triangles.md).
 
-### Structure116 baseline and packed-kernel evaluation
+### Packed MSA follow-up
+
+The packed Triton backend also avoids repeated MSA input conversions and large
+outer-product mask temporaries. Against the previous packed version (`e331765`),
+the 116-target trunk benchmark fell from **742.99 to 727.42 seconds** including
+process overhead (**2.10% less time**); MSA module time decreased **9.28%**.
+All 62 CUDA tests and 58 sampled representation comparisons matched exactly.
+The per-input MSA loops remain. See the [MSA profiling and validation report](docs/packed_msa_profiling.md).
+This is a trunk-only comparison; the full-prediction results below predate these changes.
+
+### Structure116 full-prediction baseline (`e331765`)
 
 Full prediction completed on all 116 targets, producing 580 structures with the
-new packed B4 Triton backend. Compared with the saved original Boltz-2 B1 result:
+packed B4 Triton backend at `e331765`. Compared with the saved original Boltz-2 B1 result:
 
 | Measurement | Original B1 | Packed B4 + Triton |
 |---|---:|---:|

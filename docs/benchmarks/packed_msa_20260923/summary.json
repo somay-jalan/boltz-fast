@@ -1,0 +1,392 @@
+{
+  "status": "complete",
+  "baseline_commit": "e3317655b64041b6f866585ca3c03c620a40f384",
+  "settings": {
+    "batch_size": 4,
+    "layout": "packed",
+    "pair_backend": "triton",
+    "seed": 42,
+    "recycles": 3,
+    "pairformer_passes": 4,
+    "diffusion_invoked": false
+  },
+  "control": {
+    "targets": 116,
+    "startup_seconds": 19.497850334000077,
+    "startup_inclusive_output_seconds": 738.8449607559999,
+    "trunk_seconds": 717.91178451,
+    "msa_seconds": 172.69705068599615,
+    "pairformer_seconds": 523.9657898460018,
+    "peak_allocation_gib": 61.080867767333984,
+    "allocator_retries": 0,
+    "process_seconds": 742.9889331160002
+  },
+  "candidate": {
+    "targets": 116,
+    "startup_seconds": 20.436910332000025,
+    "startup_inclusive_output_seconds": 723.2812508859997,
+    "trunk_seconds": 701.4122256140004,
+    "msa_seconds": 156.67661535500156,
+    "pairformer_seconds": 524.0627150389987,
+    "peak_allocation_gib": 61.080867767333984,
+    "allocator_retries": 0,
+    "process_seconds": 727.41511648
+  },
+  "profiled_operations": {
+    "pair_weighted_averaging": {
+      "cuda_event_seconds": 60.891452889256165,
+      "calls": 1856
+    },
+    "outer_product_mean": {
+      "cuda_event_seconds": 53.513021430470076,
+      "calls": 1856
+    }
+  },
+  "startup_inclusive_speedup": 1.021518198972993,
+  "trunk_speedup": 1.0235233409020725,
+  "msa_speedup": 1.1022516046488182,
+  "faster_trunk_batches": 22,
+  "representation_samples": {
+    "comparisons": 58,
+    "all_bitwise_equal": true,
+    "max_values_per_representation_per_batch": 65536
+  },
+  "cuda_tests_passed": 62,
+  "microbenchmarks": [
+    {
+      "operation": "opm",
+      "backend": "sequential",
+      "depth": 16224,
+      "tokens": 1062,
+      "seconds": [
+        0.2010886399998526,
+        0.19937839599992913,
+        0.1992793869999332,
+        0.19934356600015235,
+        0.19901868700003433,
+        0.19897864800009302,
+        0.19902627600004053
+      ],
+      "peak_allocated_gib": 11.606019496917725,
+      "median_seconds": 0.1992793869999332
+    },
+    {
+      "operation": "opm",
+      "backend": "triton",
+      "depth": 16224,
+      "tokens": 1062,
+      "seconds": [
+        0.1572816600000806,
+        0.15673596700003145,
+        0.15675981700019292,
+        0.15669976800018048,
+        0.1567474860000857,
+        0.1567374149999523,
+        0.15677075500002502
+      ],
+      "peak_allocated_gib": 11.606019496917725,
+      "median_seconds": 0.1567474860000857
+    },
+    {
+      "operation": "pwa",
+      "backend": "sequential",
+      "depth": 16224,
+      "tokens": 1062,
+      "seconds": [
+        0.2627975240000069,
+        0.2621291810000912,
+        0.26224458899991987,
+        0.26198819900014314,
+        0.2621177290000105,
+        0.2624762150001061,
+        0.2622643260001496
+      ],
+      "peak_allocated_gib": 18.64301872253418,
+      "median_seconds": 0.26224458899991987
+    },
+    {
+      "operation": "pwa",
+      "backend": "triton",
+      "depth": 16224,
+      "tokens": 1062,
+      "seconds": [
+        0.19014361099993948,
+        0.1901956199999404,
+        0.19021608999992168,
+        0.19023534999996627,
+        0.19019797900000412,
+        0.19021092999992106,
+        0.19020667799986768
+      ],
+      "peak_allocated_gib": 15.295272827148438,
+      "median_seconds": 0.19020667799986768
+    },
+    {
+      "operation": "opm",
+      "backend": "sequential",
+      "depth": 1,
+      "tokens": 412,
+      "seconds": [
+        0.0019804810001460282,
+        0.0019337599999289523,
+        0.0019216919999962556,
+        0.0019161299999268522,
+        0.001929611999912595,
+        0.001920791000202371,
+        0.0019133410000904405
+      ],
+      "peak_allocated_gib": 0.39748191833496094,
+      "median_seconds": 0.0019216919999962556
+    },
+    {
+      "operation": "opm",
+      "backend": "triton",
+      "depth": 1,
+      "tokens": 412,
+      "seconds": [
+        0.002326456999981019,
+        0.001987320000125692,
+        0.0019706509999650734,
+        0.0019746099999338185,
+        0.0019731810000394034,
+        0.001978819999976622,
+        0.0019636609999906796
+      ],
+      "peak_allocated_gib": 0.39748191833496094,
+      "median_seconds": 0.0019746099999338185
+    },
+    {
+      "operation": "pwa",
+      "backend": "sequential",
+      "depth": 1,
+      "tokens": 412,
+      "seconds": [
+        0.0013243059997876117,
+        0.0013799269997889496,
+        0.0012873270000000048,
+        0.00126427700001841,
+        0.0012959880000380508,
+        0.0012628570000288164,
+        0.0012638479997804097
+      ],
+      "peak_allocated_gib": 0.23685646057128906,
+      "median_seconds": 0.0012873270000000048
+    },
+    {
+      "operation": "pwa",
+      "backend": "triton",
+      "depth": 1,
+      "tokens": 412,
+      "seconds": [
+        0.0012642080000659917,
+        0.0012029170000005251,
+        0.0011918589998458629,
+        0.0011831680001250788,
+        0.0011593790000006265,
+        0.0011502079998990666,
+        0.0011721989999387006
+      ],
+      "peak_allocated_gib": 0.2350764274597168,
+      "median_seconds": 0.0011831680001250788
+    },
+    {
+      "operation": "opm",
+      "backend": "sequential",
+      "depth": 8192,
+      "tokens": 139,
+      "seconds": [
+        0.0048195239999131445,
+        0.004816042999891579,
+        0.004815572999859796,
+        0.004808774000139238,
+        0.0048299430000042776,
+        0.004814073000034114,
+        0.004824643999882028
+      ],
+      "peak_allocated_gib": 1.3318228721618652,
+      "median_seconds": 0.004816042999891579
+    },
+    {
+      "operation": "opm",
+      "backend": "triton",
+      "depth": 8192,
+      "tokens": 139,
+      "seconds": [
+        0.0044519970001601905,
+        0.0043822170000566985,
+        0.004370377999975972,
+        0.004364607999832515,
+        0.004370547999997143,
+        0.00436992699997063,
+        0.004364077999980509
+      ],
+      "peak_allocated_gib": 1.0391287803649902,
+      "median_seconds": 0.004370377999975972
+    },
+    {
+      "operation": "pwa",
+      "backend": "sequential",
+      "depth": 8192,
+      "tokens": 139,
+      "seconds": [
+        0.008675737000203299,
+        0.00864152600001944,
+        0.008647615999962,
+        0.008635656000024028,
+        0.008655907000047591,
+        0.008667075999937879,
+        0.008649437000030957
+      ],
+      "peak_allocated_gib": 2.906452178955078,
+      "median_seconds": 0.008649437000030957
+    },
+    {
+      "operation": "pwa",
+      "backend": "triton",
+      "depth": 8192,
+      "tokens": 139,
+      "seconds": [
+        0.008347578999973848,
+        0.008357399000033183,
+        0.008357269000043743,
+        0.008353299999953379,
+        0.008348527999942235,
+        0.008360860000038883,
+        0.00835518899998533
+      ],
+      "peak_allocated_gib": 2.766103744506836,
+      "median_seconds": 0.00835518899998533
+    },
+    {
+      "operation": "opm",
+      "backend": "sequential",
+      "depth": 8192,
+      "tokens": 512,
+      "seconds": [
+        0.03199399999994057,
+        0.03204948899997362,
+        0.03201179900020179,
+        0.032028438999986975,
+        0.032019100000070466,
+        0.032005279000031805,
+        0.03201492900006997
+      ],
+      "peak_allocated_gib": 2.837419033050537,
+      "median_seconds": 0.03201492900006997
+    },
+    {
+      "operation": "opm",
+      "backend": "triton",
+      "depth": 8192,
+      "tokens": 512,
+      "seconds": [
+        0.027359124999975393,
+        0.027248804999999265,
+        0.027253395000116143,
+        0.027220496000154526,
+        0.0272456449999936,
+        0.02724335500010966,
+        0.027231656000139992
+      ],
+      "peak_allocated_gib": 2.837419033050537,
+      "median_seconds": 0.0272456449999936
+    },
+    {
+      "operation": "pwa",
+      "backend": "sequential",
+      "depth": 8192,
+      "tokens": 512,
+      "seconds": [
+        0.05981971800019892,
+        0.05981768900005591,
+        0.059797469000159253,
+        0.059809827999970366,
+        0.059763979000081235,
+        0.0598101380001026,
+        0.05973633000007794
+      ],
+      "peak_allocated_gib": 4.550502300262451,
+      "median_seconds": 0.059809827999970366
+    },
+    {
+      "operation": "pwa",
+      "backend": "triton",
+      "depth": 8192,
+      "tokens": 512,
+      "seconds": [
+        0.04273955400003615,
+        0.042794575000016266,
+        0.04281357299987576,
+        0.042820774000119854,
+        0.04278342399993562,
+        0.04280204499991669,
+        0.042803903000049104
+      ],
+      "peak_allocated_gib": 3.7384867668151855,
+      "median_seconds": 0.04280204499991669
+    }
+  ],
+  "limitations": [
+    "One full run per condition, one seed, one GPU.",
+    "Trunk endpoint before diffusion and confidence; not full prediction speedup.",
+    "Representation equality is sampled, not a full-tensor bitwise comparison."
+  ],
+  "process_speedup": 1.0214098061521772,
+  "process_time_reduction_percent": 2.0961034467479323,
+  "hardware": {
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+    "driver": "595.58.03",
+    "memory_mib": 97887
+  },
+  "source_hashes_verified": true,
+  "managed_run": "r_01fdeed6",
+  "full_prediction_smoke": {
+    "targets": 4,
+    "profile": "defaults",
+    "seed": 42,
+    "recycles": 3,
+    "samples_per_target": 1,
+    "solver": "euler",
+    "steps": 200,
+    "batch_size": 4,
+    "comparisons": [
+      {
+        "target": "8K69",
+        "coordinates_exact": true,
+        "confidence_exact": true
+      },
+      {
+        "target": "8UDS",
+        "coordinates_exact": true,
+        "confidence_exact": true
+      },
+      {
+        "target": "8VR3",
+        "coordinates_exact": true,
+        "confidence_exact": true
+      },
+      {
+        "target": "9K7M",
+        "coordinates_exact": true,
+        "confidence_exact": true
+      }
+    ],
+    "all_saved_coordinates_and_confidences_exact": true
+  },
+  "evidence_archive": {
+    "file": "msa-evidence.zip",
+    "bytes": 1074748,
+    "sha256": "6cfc8622a960f9c8bf4d78bfb9ced8f8a36b0beea637fcfd70a4c9a5ea9a745e"
+  },
+  "full_prediction_smoke_managed_run": "r_79662525",
+  "vm": {
+    "machine_id": 514030,
+    "status": "Paused",
+    "gpu_type": "RTX-PRO6000",
+    "region": "IN1"
+  },
+  "software": {
+    "torch": "2.14.0+cu130",
+    "python": "3.11.16 (main, Aug 27 2026, 14:44:21) [GCC 14.3.0]"
+  }
+}

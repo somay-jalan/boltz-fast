@@ -1,0 +1,33 @@
+{
+  "targets": 4,
+  "profile": "defaults",
+  "seed": 42,
+  "recycles": 3,
+  "samples_per_target": 1,
+  "solver": "euler",
+  "steps": 200,
+  "batch_size": 4,
+  "comparisons": [
+    {
+      "target": "8K69",
+      "coordinates_exact": true,
+      "confidence_exact": true
+    },
+    {
+      "target": "8UDS",
+      "coordinates_exact": true,
+      "confidence_exact": true
+    },
+    {
+      "target": "8VR3",
+      "coordinates_exact": true,
+      "confidence_exact": true
+    },
+    {
+      "target": "9K7M",
+      "coordinates_exact": true,
+      "confidence_exact": true
+    }
+  ],
+  "all_saved_coordinates_and_confidences_exact": true
+}

@@ -71,6 +71,15 @@ class PairWeightedAveraging(nn.Module):
         m = self.norm_m(m)
         z = self.norm_z(z)
 
+        if (getattr(self, "packed_pair_backend", "sequential") == "triton"
+                and m.is_cuda and not self.training and not torch.is_grad_enabled()
+                and torch.is_autocast_enabled("cuda")):
+            # Autocast otherwise copies the FP32 normalization output for each
+            # head's value and gate projection. Keep one identical cast instead.
+            dtype = torch.get_autocast_dtype("cuda")
+            m = m.to(dtype)
+            z = z.to(dtype)
+
         if chunk_heads and not self.training:
             # Compute heads sequentially
             o_chunks = []

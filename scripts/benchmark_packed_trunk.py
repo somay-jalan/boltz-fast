@@ -26,6 +26,10 @@ parser.add_argument(
 )
 parser.add_argument("--start", type=int, default=0, help="Start index within the reference input order")
 parser.add_argument("--native-triangles", action="store_true", help="Diagnostic: mathematical PyTorch triangles with the sequential backend")
+parser.add_argument(
+    "--profile-msa", action="store_true",
+    help="Record per-operation MSA CUDA event spans, dispatch time and actual shapes",
+)
 options = parser.parse_args()
 B = options.reference
 BS = options.batch_size
@@ -42,6 +46,7 @@ meta = json.loads((B / "metadata.json").read_text())
 meta["targets"] = meta["targets"][options.start : options.start + options.count]
 rows = []
 current = None
+msa_events = []
 globals_ = {"imports": time.perf_counter() - START}
 forbidden = {}
 receipt = {
@@ -52,6 +57,7 @@ receipt = {
     "python": sys.version,
     "model_path": str(main.__file__),
 }
+receipt["profile_msa"] = options.profile_msa
 receipt["backend"] = options.backend
 receipt["native_triangles"] = options.native_triangles
 if options.native_triangles:
@@ -138,6 +144,43 @@ def timed(obj, attr, key):
     setattr(obj, attr, wrapper)
 
 
+def instrument_msa(model):
+    """Use stream events without synchronizing after each record operation."""
+    for layer in model.msa_module.layers:
+        for key in ("pair_weighted_averaging", "outer_product_mean"):
+            operation = getattr(layer, key)
+            original = operation.forward
+
+            def measured(*args, _original=original, _key=key, **kwargs):
+                start = torch.cuda.Event(enable_timing=True)
+                end = torch.cuda.Event(enable_timing=True)
+                start.record()
+                before = time.perf_counter()
+                output = _original(*args, **kwargs)
+                dispatch = time.perf_counter() - before
+                end.record()
+                msa_events.append((_key, tuple(args[0].shape), start, end, dispatch))
+                return output
+
+            operation.forward = measured
+
+
+def collect_msa_profile():
+    # The caller already synchronized at the final Pairformer boundary.
+    grouped = {}
+    for key, shape, start, end, dispatch in msa_events:
+        name = key + ":" + "x".join(map(str, shape))
+        row = grouped.setdefault(name, {
+            "operation": key, "input_shape": list(shape), "calls": 0,
+            "cuda_event_ms": 0.0, "cpu_dispatch_seconds": 0.0,
+        })
+        row["calls"] += 1
+        row["cuda_event_ms"] += start.elapsed_time(end)
+        row["cpu_dispatch_seconds"] += dispatch
+    current["msa_operation_profile"] = list(grouped.values())
+    msa_events.clear()
+
+
 trainer_predict_orig = main.Trainer.predict
 
 
@@ -201,6 +244,8 @@ def load(path, *args, **kwargs):
     ]:
         if getattr(model, attr, None) is not None:
             timed(getattr(model, attr), "forward", key)
+    if options.profile_msa:
+        instrument_msa(model)
     pair_orig = model.pairformer_module.forward
 
     def pair(*a, **k):
@@ -249,6 +294,7 @@ def load(path, *args, **kwargs):
         sync()
         torch.cuda.reset_peak_memory_stats()
         allocation_retries = torch.cuda.memory_stats()["num_alloc_retries"]
+        msa_events.clear()
         current = {
             "index": len(rows),
             "ids": [r.id for r in batch["record"]],
@@ -307,6 +353,8 @@ def load(path, *args, **kwargs):
             and current["calls"]["msa"] == 4
             and not any(forbidden.values())
         )
+        if options.profile_msa:
+            collect_msa_profile()
         current["allocator_retries"] = torch.cuda.memory_stats()["num_alloc_retries"] - allocation_retries
         current["peak_memory_gib"] = torch.cuda.max_memory_allocated() / 1024**3
         current["forbidden_calls"] = dict(forbidden)

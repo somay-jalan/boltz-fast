@@ -1,0 +1,7 @@
+{
+  "command": "PYTHONPATH=src python -m pytest -q tests/model/test_packed_msa.py",
+  "result": "62 passed in 2.13s",
+  "managed_run": "r_01fdeed6",
+  "comparison": "exact equality (rtol=0, atol=0)",
+  "candidate_source_manifest": "candidate-source-sha256.json"
+}
