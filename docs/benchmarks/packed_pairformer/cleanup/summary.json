@@ -1,0 +1,94 @@
+[
+  {
+    "case": "random-b4",
+    "lengths": [
+      65,
+      73,
+      97,
+      128
+    ],
+    "seed": 901,
+    "checkpointing": true,
+    "passed": true,
+    "forward_relative_l2": [
+      0.0,
+      0.0
+    ],
+    "input_gradient_relative_l2": [
+      0.0,
+      0.0
+    ],
+    "worst_gradient": [
+      0.003045063731210583,
+      "layers.11.transition_z.fc3.weight"
+    ]
+  },
+  {
+    "case": "real-b4",
+    "lengths": [
+      193,
+      193,
+      193,
+      167
+    ],
+    "seed": 901,
+    "checkpointing": true,
+    "passed": true,
+    "forward_relative_l2": [
+      0.0,
+      0.0
+    ],
+    "input_gradient_relative_l2": [
+      0.0,
+      0.0
+    ],
+    "worst_gradient": [
+      0.0028153232190154935,
+      "layers.32.transition_z.fc3.weight"
+    ]
+  },
+  {
+    "case": "random-long",
+    "lengths": [
+      65,
+      385
+    ],
+    "seed": 123,
+    "checkpointing": true,
+    "passed": true,
+    "forward_relative_l2": [
+      0.0,
+      0.0
+    ],
+    "input_gradient_relative_l2": [
+      0.0,
+      0.0
+    ],
+    "worst_gradient": [
+      0.0017378401789910321,
+      "layers.63.transition_z.fc3.weight"
+    ]
+  },
+  {
+    "case": "random-no-checkpoint",
+    "lengths": [
+      73,
+      97
+    ],
+    "seed": 123,
+    "checkpointing": false,
+    "passed": true,
+    "forward_relative_l2": [
+      0.0,
+      0.0
+    ],
+    "input_gradient_relative_l2": [
+      0.0,
+      0.0
+    ],
+    "worst_gradient": [
+      0.0018160856163061854,
+      "layers.54.transition_z.fc3.weight"
+    ]
+  }
+]

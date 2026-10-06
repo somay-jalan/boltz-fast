@@ -187,7 +187,7 @@ def main():
         command += ["--recycling_steps", "5", "--diffusion_samples", "5",
                     "--max_parallel_samples", "8", "--sampling_steps", "200", "--num_workers", "2"]
     if args.variant == "packed":
-        command += ["--batch_size", "4", "--batch_layout", "packed", "--packed_pair_backend", "triton"]
+        command += ["--batch_size", "4", "--batch_layout", "packed", "--packed_msa_backend", "triton"]
     receipt["cli_arguments"] = command
     receipt["preflight_seconds"] = prediction_start - START
     persist()

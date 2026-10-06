@@ -1,0 +1,80 @@
+{
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "torch": "2.14.0+cu130",
+  "triton": "3.8.0",
+  "lengths": [
+    193,
+    193,
+    193,
+    167
+  ],
+  "seed": 321,
+  "backend": "packed",
+  "checkpointing_training": true,
+  "protocol": "Median CUDA events; includes replay input/output device copies; excludes compilation/capture, optimizer and data loading; backward includes checkpoint recomputation.",
+  "inference_capture_seconds": 6.183680836999997,
+  "inference": {
+    "median_ms": 367.8962707519531,
+    "samples_ms": [
+      371.5118103027344,
+      371.7301330566406,
+      370.03369140625,
+      367.8962707519531,
+      367.8337707519531,
+      367.9476623535156,
+      367.9146423339844,
+      367.8671569824219,
+      367.9848327636719,
+      367.92327880859375,
+      364.2870178222656,
+      360.8615417480469,
+      360.9013671875,
+      360.79302978515625,
+      360.8605651855469
+    ]
+  },
+  "training_capture_seconds": 10.944973940000068,
+  "training": {
+    "forward_ms": 486.97601318359375,
+    "backward_ms": 1766.3348388671875,
+    "total_ms": 2253.278076171875,
+    "samples": [
+      {
+        "forward_ms": 485.3190002441406,
+        "backward_ms": 1766.2550048828125,
+        "total_ms": 2251.573974609375
+      },
+      {
+        "forward_ms": 485.2998352050781,
+        "backward_ms": 1766.4024658203125,
+        "total_ms": 2251.702392578125
+      },
+      {
+        "forward_ms": 487.8443908691406,
+        "backward_ms": 1766.3348388671875,
+        "total_ms": 2254.17919921875
+      },
+      {
+        "forward_ms": 487.6094970703125,
+        "backward_ms": 1766.4332275390625,
+        "total_ms": 2254.042724609375
+      },
+      {
+        "forward_ms": 487.0807189941406,
+        "backward_ms": 1766.32666015625,
+        "total_ms": 2253.407470703125
+      },
+      {
+        "forward_ms": 486.5012512207031,
+        "backward_ms": 1766.5162353515625,
+        "total_ms": 2253.017333984375
+      },
+      {
+        "forward_ms": 486.97601318359375,
+        "backward_ms": 1766.3021240234375,
+        "total_ms": 2253.278076171875
+      }
+    ],
+    "peak_allocated_gib": 9.574443817138672
+  }
+}

@@ -1,3 +1,5 @@
+> **Historical report.** Commands and backend names below describe earlier commits. For this branch use the [current packed Pairformer guide](packed_pairformer.md); old grouped-triangle Pairformer implementations have been removed. These measurements do not validate the new backend end to end.
+
 # Grouped triangles for packed inference
 
 This is the optimized fixed packed implementation on

@@ -7,7 +7,7 @@ import atexit, functools, gc, hashlib, json, os, subprocess, sys, traceback, arg
 from pathlib import Path
 
 parser = argparse.ArgumentParser(
-    description="Compare packed triangle backends with cached full-checkpoint trunk inference"
+    description="Compare packed MSA backends with cached full-checkpoint trunk inference"
 )
 parser.add_argument(
     "--reference",
@@ -63,10 +63,10 @@ receipt["native_triangles"] = options.native_triangles
 if options.native_triangles:
     assert options.backend == "sequential"
     from boltz.model.modules import packed
-    original_pair_operation = packed.pair_operation
+    original_pair_operation = packed.msa_pair_operation
     def native_pair_operation(module, values, masks, layout, use_kernels, attention=False):
         return original_pair_operation(module, values, masks, layout, False, attention)
-    packed.pair_operation = native_pair_operation
+    packed.msa_pair_operation = native_pair_operation
 receipt["gpu"] = torch.cuda.get_device_name()
 source_hashes = {
     str(p.relative_to(REPO)): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -407,7 +407,7 @@ try:
             str(BS),
             "--batch_layout",
             "packed",
-            "--packed_pair_backend",
+            "--packed_msa_backend",
             options.backend,
             "--seed",
             "42",

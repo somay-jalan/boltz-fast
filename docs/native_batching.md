@@ -1,3 +1,5 @@
+> **Historical report.** Commands and backend names below describe earlier commits. For this branch use the [current packed Pairformer guide](packed_pairformer.md); old grouped-triangle Pairformer implementations have been removed. These measurements do not validate the new backend end to end.
+
 # Native batching and EDM Heun branches
 
 `boltz-fast` publishes the native batching and EDM Heun work originally developed in the `/home/boltz-original` server checkout. The canonical repository for this work is now `https://github.com/somay-jalan/boltz-fast.git`. The Python package and command remain named `boltz`.

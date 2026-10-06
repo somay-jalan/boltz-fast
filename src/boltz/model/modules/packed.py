@@ -122,11 +122,15 @@ def packed_context(forward):
 
 
 def enable_packed(model, pair_backend="sequential"):
-    """Enable the optional implementation without changing checkpoint weights."""
+    """Enable packed MSA/diffusion inference; Pairformer stays native.
+
+    ``pair_backend`` is retained as the Python keyword for MSA grouping.
+    Optimized standalone Pairformer execution uses PackedPairformer explicitly.
+    """
     if model.training:
         raise ValueError("Call eval() before enabling packed inference")
     if pair_backend not in {"sequential", "triton"}:
-        raise ValueError(f"Unknown packed pair backend: {pair_backend}")
+        raise ValueError(f"Unknown packed MSA backend: {pair_backend}")
     for module in model.modules():
         module.packed_inference = True
         module.packed_pair_backend = pair_backend
@@ -167,12 +171,8 @@ def token_attention(module, s, z, mask, layout, bias_layout=None, multiplicity=1
     return module.proj_o(g * out.reshape(-1, module.c_s))
 
 
-def pair_operation(module, values, masks, layout, use_kernels, attention=False):
+def msa_pair_operation(module, values, masks, layout, use_kernels, attention=False):
     """Dispatch record-local pair operations without a padded global square."""
-    if getattr(module, "packed_pair_backend", "sequential") == "triton":
-        from boltz.model.modules.packed_triangles import triangle_attention, triangle_multiply
-        operation = triangle_attention if attention else triangle_multiply
-        return operation(module, values, masks, layout)
     results = []
     for n, value, mask in zip(layout.lengths, layout.parts(values, True), layout.parts(masks, True)):
         args = {"mask": mask, "use_kernels": use_kernels}
@@ -183,31 +183,12 @@ def pair_operation(module, values, masks, layout, use_kernels, attention=False):
     return torch.cat(results)
 
 
-def pair_layer(layer, z, pair_mask, layout, use_kernels):
-    z = z + pair_operation(layer.tri_mul_out, z, pair_mask, layout, use_kernels)
-    z = z + pair_operation(layer.tri_mul_in, z, pair_mask, layout, use_kernels)
-    z = z + pair_operation(layer.tri_att_start, z, pair_mask, layout, use_kernels, True)
-    z = z + pair_operation(layer.tri_att_end, z, pair_mask, layout, use_kernels, True)
+def msa_pair_layer(layer, z, pair_mask, layout, use_kernels):
+    z = z + msa_pair_operation(layer.tri_mul_out, z, pair_mask, layout, use_kernels)
+    z = z + msa_pair_operation(layer.tri_mul_in, z, pair_mask, layout, use_kernels)
+    z = z + msa_pair_operation(layer.tri_att_start, z, pair_mask, layout, use_kernels, True)
+    z = z + msa_pair_operation(layer.tri_att_end, z, pair_mask, layout, use_kernels, True)
     return z + layer.transition_z(z)
-
-
-def pairformer(module, s, z, mask, pair_mask, use_kernels):
-    layout = layout_for(mask if s is not None else pair_mask, pair=s is None)
-    z = layout.pack(z, True)
-    pair_mask = layout.pack(pair_mask, True)
-    if s is not None:
-        s = layout.pack(s)
-        mask = layout.pack(mask)
-    for layer in module.layers:
-        z = pair_layer(layer, z, pair_mask, layout, use_kernels)
-        if s is not None:
-            with torch.autocast(s.device.type, enabled=False):
-                normed = layer.pre_norm_s(s.float())
-                s = s.float() + token_attention(layer.attention, normed, z.float(), mask.float(), layout)
-                s = layer.s_post_norm(s + layer.transition_s(s))
-    if s is None:
-        return layout.unpack(z, True)
-    return layout.unpack(s), layout.unpack(z, True)
 
 
 def diffusion_transformer(module, a, s, bias, mask, multiplicity):
@@ -344,5 +325,5 @@ def msa_module(module, z, emb, feats, use_kernels):
                 update = layer.outer_product_mean(mi.reshape(1, rows, n, -1), mask_i, 4 if n > const.chunk_size_threshold else None)
                 updates.append(update.reshape(n * n, -1))
             z = z + torch.cat(updates)
-        z = pair_layer(layer.pairformer_layer, z, pair_mask, layout, use_kernels)
+        z = msa_pair_layer(layer.pairformer_layer, z, pair_mask, layout, use_kernels)
     return layout.unpack(z, True)

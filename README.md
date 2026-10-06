@@ -2,7 +2,7 @@
 
 Native and packed batched inference for Boltz-2, with an optional EDM Heun diffusion solver. Euler remains the default. Based on the open-source Boltz code and weights; original license and scientific attribution are retained below.
 
-See the [batching and branch guide](docs/native_batching.md) for usage, solver restrictions and validation.
+See the [packed Pairformer guide](docs/packed_pairformer.md) for implementation details, training/inference usage, results and limitations.
 
 <div align="center">
   <div>&nbsp;</div>
@@ -24,81 +24,13 @@ Boltz is a family of models for biomolecular interaction prediction. Boltz-1 was
 
 All the code and weights are provided under MIT license, making them freely available for both academic and commercial uses. For more information about the model, see the [Boltz-1](https://doi.org/10.1101/2024.11.19.624167) and [Boltz-2](https://doi.org/10.1101/2025.06.14.659707) technical reports. To discuss updates, tools and applications join our [Slack channel](https://boltz.bio/join-slack).
 
-## Experimental native batching
+## Pairformer training and inference
 
-This branch contains native and packed batching plus the opt-in EDM Heun solver. Read the [branch, usage and validation guide](docs/native_batching.md) and [Heun solver notes](docs/edm_heun.md) before comparing it with pristine upstream. Euler remains the default solver.
+This branch retains **native PyTorch** and one **optimized packed Pairformer** with forward and backward support. Use `PackedPairformer` for eager execution, or its inference/training CUDA-graph wrappers for repeated fixed-layout batches.
 
-### Optimized fixed packed version
+Read the [implementation, results, installation and usage guide](docs/packed_pairformer.md). Full 64-block random/real tests produced identical forward outputs and input gradients, with worst per-weight-tensor gradient relative L2 error **0.305%**. On the measured real B4 batch, the optimized adapter improved inference **1.13×**, backward **1.39×**, and total training **1.33×** over the previous packed adapter. The original approximate fast branch remains faster in inference; timings and limitations are in the guide.
 
-The `feature/packed-triangle-kernels` branch is the optimized packed version.
-It fixes the per-record triangle dispatch bottleneck by running heterogeneous
-records through grouped Triton triangle multiplication and attention kernels.
-It also fixes contraction rounding to match the reference BF16 precision boundary.
-The backend now also groups the expensive MSA operations described below. Input
-preparation and some other operations remain per record, with the known
-confidence-ranking limitation documented in the [full report](docs/full_structure116.md).
-
-Enable the optimized backend explicitly after installing this branch:
-
-```sh
-boltz predict inputs --batch_layout packed --batch_size 4 \
-  --packed_pair_backend triton --seed 42
-```
-
-The backend requires CUDA, supports inference only, and remains opt-in; the
-sequential backend is still the default. See [implementation and CUDA tests](docs/packed_triangles.md).
-
-### Grouped packed MSA
-
-The optimized backend groups pair-weighted averaging and outer-product mean
-across packed examples. Their hot path no longer dispatches Python work per
-example, attention head or OPM feature chunk. Workspace waves bound temporary
-storage. All **142 CUDA tests passed**, covering FP32 and BF16/FP16 autocast,
-record isolation, and large-buffer indexing. Outputs are not bitwise identical.
-
-On all 116 full predictions at default settings (three recycles, one sample),
-job time fell **1,258.65 → 1,215.02 seconds: 3.47% less time** compared with
-`7d8233a`. Peak tensor allocation fell **77.87 → 72.02 GiB**. Mean protein lDDT
-changed **0.850164 → 0.849897**, and mean DockQ **0.590696 → 0.588500**. Some
-individual losses are larger: −0.050 lDDT on 8WQ8 and −0.101 DockQ on 9BCE.
-This one-seed comparison does not establish accuracy equivalence. See the
-[grouped MSA measurements, per-target results and limitations](docs/grouped_msa.md).
-
-### Earlier MSA conversion/mask optimization (`7d8233a`)
-
-At `7d8233a`, the packed Triton backend avoided repeated MSA input conversions and large
-outer-product mask temporaries. Against the previous packed version (`e331765`),
-the 116-target trunk benchmark fell from **742.99 to 727.42 seconds** including
-process overhead (**2.10% less time**); MSA module time decreased **9.28%**.
-All 62 CUDA tests and 58 sampled representation comparisons matched exactly.
-The per-input MSA loops still remained at that commit. See the [historical MSA profiling and validation report](docs/packed_msa_profiling.md).
-This is a trunk-only comparison; the full-prediction results below predate these changes.
-
-### Structure116 full-prediction baseline (`e331765`)
-
-Full prediction completed on all 116 targets, producing 580 structures with the
-packed B4 Triton backend at `e331765`. Compared with the saved original Boltz-2 B1 result:
-
-| Measurement | Original B1 | Packed B4 + Triton |
-|---|---:|---:|
-| Total inference process time | 78.72 min | **56.22 min** |
-| Protein lDDT | 0.8541 | 0.8534 |
-| Backbone lDDT | 0.9086 | 0.9075 |
-| Protein-interface DockQ (56 targets) | 0.6139 | 0.6125 |
-| Peak observed device memory | 68.50 GiB | 94.20 GiB |
-
-This is **1.40× throughput, with 28.6% less process time** on an RTX PRO 6000
-Blackwell. Mean accuracy scores are slightly lower; paired target bootstrap
-intervals include zero for all three differences. This one-seed experiment does
-not establish equivalence, and the timing baseline is historical. Some individual
-targets show substantial losses despite the close averages; the detailed report
-includes the largest changes and checks of all five samples on two outliers.
-
-Both configurations use Euler 200 steps, step scale 1.5, five recycles and five
-samples per target; the latter two are benchmark overrides, not CLI defaults.
-No targets were skipped or processes restarted. Nine allocation warnings were
-recovered internally and remain included in the timing. See the
-[full results, confidence-ranking audit and reproduction](docs/full_structure116.md).
+Older Pairformer variants and their switches have been removed. Native `PairformerModule` stays the default; optimized execution uses the explicit Python API. Unrelated packed MSA/diffusion code and the optional EDM Heun solver remain. The MSA CLI selector is now `--packed_msa_backend`; it does not select a Pairformer implementation. Older [Structure116](docs/full_structure116.md), [MSA](docs/grouped_msa.md) and [batching](docs/native_batching.md) reports describe the named historical commits, not new end-to-end validation of this branch.
 
 ## Installation
 

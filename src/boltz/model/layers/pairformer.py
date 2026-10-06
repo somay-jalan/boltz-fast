@@ -177,9 +177,6 @@ class PairformerModule(nn.Module):
             Whether to use kernels.
 
         """
-        if getattr(self, "packed_inference", False) and not self.training:
-            from boltz.model.modules.packed import pairformer
-            return pairformer(self, s, z, mask, pair_mask, use_kernels)
         if not self.training:
             if z.shape[1] > const.chunk_size_threshold:
                 chunk_size_tri_attn = 128
@@ -311,9 +308,6 @@ class PairformerNoSeqModule(nn.Module):
         pair_mask: Tensor,
         use_kernels: bool = False,
     ) -> Tensor:
-        if getattr(self, "packed_inference", False) and not self.training:
-            from boltz.model.modules.packed import pairformer
-            return pairformer(self, None, z, None, pair_mask, use_kernels)
         if not self.training:
             if z.shape[1] > const.chunk_size_threshold:
                 chunk_size_tri_attn = 128

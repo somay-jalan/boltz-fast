@@ -936,10 +936,11 @@ def cli() -> None:
     help="Boltz-2 inference layout. Packed execution avoids padding inside repeated model stacks.",
 )
 @click.option(
-    "--packed_pair_backend",
+    "--packed_msa_backend",
+    "packed_pair_backend",
     type=click.Choice(["sequential", "triton"]),
     default="sequential",
-    help="Packed triangle backend. Triton groups variable-length records without padding (experimental, CUDA inference only).",
+    help="Packed MSA backend; Pairformer remains native. Use the packed_pairformer Python API for optimized Pairformer training/inference.",
 )
 @click.option(
     "--contact_guidance/--no_contact_guidance",
@@ -1161,7 +1162,7 @@ def predict(  # noqa: C901, PLR0915, PLR0912
     if batch_layout == "packed" and model != "boltz2":
         raise click.UsageError("Packed inference is supported for Boltz-2 only.")
     if packed_pair_backend == "triton" and (batch_layout != "packed" or accelerator != "gpu"):
-        raise click.UsageError("The Triton pair backend requires --batch_layout packed --accelerator gpu.")
+        raise click.UsageError("The Triton MSA backend requires --batch_layout packed --accelerator gpu.")
     if batch_size > 1 and model != "boltz2":
         raise click.UsageError("Batched inference is only supported for Boltz-2.")
     if batch_size > 1 and use_potentials:

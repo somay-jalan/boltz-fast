@@ -1,0 +1,27 @@
+{
+  "python": "3.11.16",
+  "torch": "2.14.0+cu130",
+  "triton": "3.8.0",
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "files": {
+    "src/boltz/model/modules/packed_pairformer/_autograd.py": "fcd88a92aa3ed38385e9d3db6934b77aa921eb302c5e41546c2dd9eb3a046155",
+    "src/boltz/model/modules/packed_pairformer/_layout_kernels.py": "2459fe5d0be8269cb522261fbab55defdb15edeeb8f93c0571e505065ce9c38a",
+    "src/boltz/model/modules/packed_pairformer/_normalization.py": "08e4e4bb013ff34314960851ad75b9897828b319527f1dd9a230ffade55a3e83",
+    "src/boltz/model/modules/packed_pairformer/_layout.py": "1f26e27e3a04af091e1e86546392d472bbf14bd616f113cf71fb2d2ed5de3653",
+    "src/boltz/model/modules/packed_pairformer/_ops.py": "ba3a08ed0ec8f41f8445a53410b4cc5cfffa0985dc161298d0b9770678421551",
+    "src/boltz/model/modules/packed_pairformer/__init__.py": "575ee00bca95e88ce8de41e13ffe03f42181fa04ba69cb657504154e27079e55",
+    "src/boltz/model/modules/packed_pairformer/_math_kernels.py": "e422570063774428c24bc7695e8937662e5bfafcfc0b2c1337917428ed5fabc5",
+    "src/boltz/model/modules/packed_pairformer/_graphs.py": "469bcfa543a4b7f5c3ee641df3a6825a27a073f1c4ec9da4d787039e023e02ce",
+    "src/boltz/model/modules/packed_pairformer/_batch.py": "d3c0d43a5fa3fbc42029b07b3b317f49b1fb866ee9343c992a9ac1b0f6b719a9",
+    "src/boltz/model/modules/packed_pairformer/_pointwise_kernels.py": "024f2a6da32cab29d02b902114ea606eeee297f420c4aea5d37e44535119a18a",
+    "tests/model/test_packed_pairformer.py": "84578abb99074dc8cb8089da372a8d7e014ae25b8cf23529ac3d6e29c92813c7",
+    "tests/model/test_packed_pairformer_training.py": "4ceecdb8f48e61814dd8acec97a1179ba0f30234f15f1895fc9dec086845f387",
+    "tests/model/test_packed_pairformer_replay.py": "7105d3f6aa2013d6659bbaf8192fb42e9321f6f30d46de322369a5e3f345335d",
+    "src/boltz/model/layers/pairformer.py": "794efe7648927a1681a236cb54bb65cb3125acc48a89a72cf205bbc551be2f2e",
+    "src/boltz/model/modules/packed.py": "9a7231d8f4541145fc06950cc8cbca18531f324c9a608384ae783bbd3e80bbad",
+    "src/boltz/main.py": "10fc5d1a13b9d5ed360f539e7e04102343e0e48547aa07638733c24f51e1ffd5",
+    "scripts/validate_packed_pairformer.py": "be7da3fcb69add703c907d13a6b97301a0f98bb9c04de540477170aafb45b18f",
+    "scripts/benchmark_packed_pairformer.py": "98d839f0ed9887fd7b767d12cee8813f9f83d553d4f369cf5e69edc92c4b2727",
+    "tests/model/packed_reference.py": "e457a06bca8305fc807dbe632e4f8cb4dd24936eea9c158fe0fa88bf87457b4f"
+  }
+}

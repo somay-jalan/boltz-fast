@@ -1,0 +1,70 @@
+[
+  {
+    "file": "fast-123-True-False-73-97.json",
+    "lengths": [
+      73,
+      97
+    ],
+    "seed": 123,
+    "checkpointing": false,
+    "single_error": 0.0,
+    "pair_error": 0.0,
+    "input_gradient_max_error": 0.0,
+    "worst_weight_gradient_error": 0.0018160856163061854,
+    "combined_weight_gradient_error": 5.2769296739203e-05,
+    "parameter_tensors": 3392,
+    "passed": true
+  },
+  {
+    "file": "fast-123-True-True-65-385.json",
+    "lengths": [
+      65,
+      385
+    ],
+    "seed": 123,
+    "checkpointing": true,
+    "single_error": 0.0,
+    "pair_error": 0.0,
+    "input_gradient_max_error": 0.0,
+    "worst_weight_gradient_error": 0.0017378401789910321,
+    "combined_weight_gradient_error": 7.677539237177028e-05,
+    "parameter_tensors": 3392,
+    "passed": true
+  },
+  {
+    "file": "fast-901-True-True-65-73-97-128.json",
+    "lengths": [
+      65,
+      73,
+      97,
+      128
+    ],
+    "seed": 901,
+    "checkpointing": true,
+    "single_error": 0.0,
+    "pair_error": 0.0,
+    "input_gradient_max_error": 0.0,
+    "worst_weight_gradient_error": 0.003045063731210583,
+    "combined_weight_gradient_error": 0.000105169858857862,
+    "parameter_tensors": 3392,
+    "passed": true
+  },
+  {
+    "file": "fast-901-True-True-real.json",
+    "lengths": [
+      193,
+      193,
+      193,
+      167
+    ],
+    "seed": 901,
+    "checkpointing": true,
+    "single_error": 0.0,
+    "pair_error": 0.0,
+    "input_gradient_max_error": 0.0,
+    "worst_weight_gradient_error": 0.0028153232190154935,
+    "combined_weight_gradient_error": 0.0008668146699303853,
+    "parameter_tensors": 3392,
+    "passed": true
+  }
+]

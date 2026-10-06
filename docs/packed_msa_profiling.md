@@ -1,3 +1,5 @@
+> **Historical report.** Commands and backend names below describe earlier commits. For this branch use the [current packed Pairformer guide](packed_pairformer.md); old grouped-triangle Pairformer implementations have been removed. These measurements do not validate the new backend end to end.
+
 # Packed MSA profiling at `7d8233a`
 
 This report describes the earlier changes at `7d8233a`. The subsequent

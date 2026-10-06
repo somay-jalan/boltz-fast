@@ -1,0 +1,7 @@
+Optimized packed and prior packed regression suite:
+............                                                             [100%]
+12 passed in 23.17s
+
+Existing accurate training-graph suite:
+....                                                                     [100%]
+4 passed in 5.39s

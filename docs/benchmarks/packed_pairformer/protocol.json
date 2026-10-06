@@ -1,0 +1,33 @@
+{
+  "accuracy_reference": "Native PyTorch PairformerModule; 64 pretrained layers; FP32 weights/states with BF16 autocast, TF32 disabled; unchunked training convention",
+  "acceptance": "relative L2 < 0.01 separately for s, z, both input gradients and each of 3392 parameter-gradient tensors; per-record and maximum absolute errors also recorded",
+  "checkpoint": "boltz2_conf.ckpt (pretrained Pairformer weights)",
+  "real_inputs": {
+    "8K69": {
+      "crop": 193,
+      "original_tokens": 1618
+    },
+    "8VR3": {
+      "crop": 193,
+      "original_tokens": 760
+    },
+    "9K7M": {
+      "crop": 193,
+      "original_tokens": 356
+    },
+    "8UDS": {
+      "tokens": 167,
+      "cropped": false
+    }
+  },
+  "performance": {
+    "gpu": "RTX PRO 6000 Blackwell",
+    "torch": "2.14.0+cu130",
+    "triton": "3.8",
+    "inference": "15 graph replays after 3 untimed replays; median CUDA event and wall times; copies, packing and output clones included",
+    "training": "7 timed graph forward/backward pairs after 2 untimed pairs; checkpointing enabled; median event times; backward includes checkpoint recomputation",
+    "excluded": "JIT compilation and graph construction; reported separately for training",
+    "original_fast": "Untouched source at 9a8e890a1dd6ed87109530b7a5394572c7903b57, inference only"
+  },
+  "not_tested": "Full 116-target diffusion rerun; other GPUs and software versions; higher-order gradients"
+}
